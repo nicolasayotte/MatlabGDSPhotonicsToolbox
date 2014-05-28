@@ -2,7 +2,7 @@ MatlabGDSPhotonicsToolbox
 =========================
 This software is under the MIT license. (Very public)
 
-This is a Matlab library of functions to facilitate the design of Photonics Integrated Circuits GDS layouts that I have developped during my PhD.
+This is a Matlab library of functions to facilitate the design of Photonics Integrated Circuits GDS layouts that I have developped with Alexandre D. Simard during my PhD.
 
 This is oriented towards intuitive and adaptable creation of GDS layout files for fabrication in different facilities across the world. The toolbox creates a GDS based on a custom general layer map, but can be set up to export to any other layer map once the design is done.
 
@@ -22,6 +22,15 @@ Features:
 
 It is strongly encouraged to get the free software KLayout to look at your GDS files:
 http://www.klayout.de/
+
+First contact with the library :
+- There will be a PDF library presentation up soon!
+- Open the Functions - GDSII Library Folder
+- Verify run makemex (and possibly mex -setup before that) to compile the base library from Ulf.
+- Open Project - New Project
+- Run the Main.m, read ProjectDefinition.m
+- Go through the code of the cells and look at the resulting .gds files
+- Duplicate the Project folder and make your own!
 
 =========================
 Includes in the Functions - GDSII Library Folder :
