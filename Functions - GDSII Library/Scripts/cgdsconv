@@ -1,0 +1,27 @@
+#!/usr/local/bin/octave -q
+#
+# Convert layout files from compound .cgds
+# format to standard .gds format.
+#
+# Example:  cgdsconv *.cgds
+#
+# Ulf Griesmann, August 2013
+
+# check if we have a file name
+if ~nargin
+   fprintf('\nConvert files from compound GDS (.cgds) to GDS (.gds) format.\n\n');
+   fprintf('Usage   :  cgdsconv <list of compound GDS (.cgds) file names>\n');
+   fprintf('Example :\n');
+   fprintf('             cgdsconv dem*.cgds\n');
+   exit(-1);
+endif
+
+# process the files
+arg_list = argv();
+for k=1:nargin
+   fninp = arg_list{k};
+   L = read_gds_library(fninp);
+   fnout = ['!',fninp(1:end-5),'.gds'];
+   write_gds_library(L, fnout);
+   clear L;
+endfor

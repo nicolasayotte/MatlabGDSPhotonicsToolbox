@@ -1,0 +1,9 @@
+
+Q: Compiling the GDS II toolbox on Windows results in the following error
+   message: cannot open include file: 'stdint.h': No such file or directory.
+
+A: Microsoft Visual C++ 2008 Express does not fully conform to recent C 
+   standards. In particular, it lacks the definition of certain integer 
+   types. A standard conformant include file 'stdint.h' for MSC that also
+   works with the 2008 version of MSC can be obtained here:
+   http://msinttypes.googlecode.com/svn/trunk/stdint.h (in October 2013).

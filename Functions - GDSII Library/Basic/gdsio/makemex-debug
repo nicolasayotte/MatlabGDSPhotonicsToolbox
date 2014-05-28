@@ -1,0 +1,20 @@
+#!/bin/sh
+#
+# compiles .mex functions in Linux/Unix for debugging
+#
+
+export CFLAGS='-g -Wall'
+
+mkoctfile --mex -g -Wall gds_open.c mexfuncs.c
+mkoctfile --mex -g -Wall gds_close.c mexfuncs.c
+mkoctfile --mex -g -Wall gds_ftell.c mexfuncs.c
+mkoctfile --mex -g -Wall gds_structdata.c gdsio.c mexfuncs.c
+mkoctfile --mex -g -Wall gds_libdata.c gdsio.c mexfuncs.c
+mkoctfile --mex -g -Wall gds_beginstruct.c gdsio.c mexfuncs.c
+mkoctfile --mex -g -Wall gds_endstruct.c gdsio.c mexfuncs.c
+mkoctfile --mex -g -Wall gds_beginlib.c gdsio.c mexfuncs.c
+mkoctfile --mex -g -Wall gds_endlib.c gdsio.c mexfuncs.c
+mkoctfile --mex -g -Wall gds_write_element.c gdsio.c mexfuncs.c
+mkoctfile --mex -g -Wall gds_read_element.c gdsio.c mexfuncs.c mxlist.c
+mkoctfile --mex -g -Wall gds_record_info.c gdsio.c mexfuncs.c
+rm *.o

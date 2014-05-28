@@ -1,0 +1,6 @@
+#Matlab GitIgnore Specifics
+*.asv
+Project*/*.gds
+Project*/Cells/
+hs_err_pid*.log
+Thumbs.db

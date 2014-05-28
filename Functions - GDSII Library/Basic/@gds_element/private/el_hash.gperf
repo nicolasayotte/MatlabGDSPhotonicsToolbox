@@ -1,0 +1,26 @@
+%{
+/* hash table for element lookup
+ *
+ * process with:
+ *    gperf el_hash.gperf > el_hash.h
+ *
+ * NOTE: this software is in the Public Domain
+ * Ulf Griesmann, July 2013
+ */
+%}
+%language=ANSI-C
+%struct-type
+
+struct keyword {
+   char *name;
+   element_kind kind;
+};
+
+%%
+boundary, GDS_BOUNDARY
+path,     GDS_PATH
+sref,     GDS_SREF
+aref,     GDS_AREF
+text,     GDS_TEXT
+node,     GDS_NODE
+box,      GDS_BOX

@@ -1,0 +1,24 @@
+#!/usr/local/bin/octave -q
+#
+# print information about the distribution of
+# elements over layers in a GDS II file.
+#
+# Example:  gdslayers *.gds
+#
+# Ulf Griesmann, November 2012
+
+# check if we have a file name
+if ~nargin
+   fprintf('\nDisplay element distribution over layers in GDS (.gds) files\n\n');
+   fprintf('Usage   :  gdslayers <list of GDS II file names>\n');
+   fprintf('Example :\n');
+   fprintf('             gdslayers dem*.gds\n');
+   exit(-1);
+endif
+
+# process the files
+arg_list = argv();
+for k=1:nargin
+   layout = read_gds_library(arg_list{k});
+   layerinfo(layout);
+endfor

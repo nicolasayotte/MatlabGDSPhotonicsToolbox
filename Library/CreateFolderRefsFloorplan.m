@@ -1,0 +1,12 @@
+function CreateFolderRefsFloorplan()
+%CREATEFOLDERREFSFLOORPLAN Create the floorplan info for all .gds in the current folder.
+% Author : Nicolas Ayotte                                   Creation date: 27/04/2014
+
+tp = cd; cd ..; addpath(genpath(cd)); cd(tp);     % add path to every folder of the library
+
+files = dir('*.gds');
+for file = 1 : length(files)
+  CreateRefsFloorplan(files(file).name);
+end
+
+end

@@ -1,0 +1,31 @@
+%{
+/* hash table for accessing the flags for optional properties
+ *
+ * process with:
+ *    gperf has_hash.gperf > has_hash.h
+ *
+ * NOTE: this software is in the Public Domain
+ * Ulf Griesmann, July 2013
+ */
+#include <stdint.h>
+#include "gdstypes.h"
+
+%}
+%language=ANSI-C
+%struct-type
+
+struct keyword {
+   char *name;
+   unsigned int flag_bit;
+};
+
+%%
+elflags, HAS_ELFLAGS
+plex,    HAS_PLEX
+ptype,   HAS_PTYPE
+width,   HAS_WIDTH
+ext,     (HAS_BGNEXTN | HAS_ENDEXTN)
+present, HAS_PRESTN
+strans,  HAS_STRANS
+mag,     HAS_MAG
+angle,   HAS_ANGLE

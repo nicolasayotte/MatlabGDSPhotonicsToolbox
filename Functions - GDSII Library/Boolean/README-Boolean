@@ -1,0 +1,28 @@
+
+Boolean Set Operations for the GDS II Octave / MATLAB Toolbox
+=============================================================
+
+Beginning with version 86 the GDS II toolbox provides a method
+'poly_bool' in the gds_element class that performs Boolean set
+operations on GDS boundary elements. This function makes use of the
+Clipper library by Angus Johnson (www.angusj.com).The Clipper library
+is written in C++ and cannot be compiled with the LCC C compiler that
+is included with MATLAB on Windows 32 up to R2011b (?).
+
+The mex interface function must be compiled to make the functionality
+available to the GDS II toolbox. Change to either Boolean directory
+and type
+
+makemex
+
+at the MATLAB prompt. The same works in Octave, but the shell script
+
+./makemex-octave
+
+can also be run to compile the mex functions. 
+
+
+Ulf Griesmann, March 2014
+
+ulf.griesmann@nist.gov
+ulfgri@gmail.com

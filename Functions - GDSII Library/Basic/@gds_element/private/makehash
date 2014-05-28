@@ -1,0 +1,10 @@
+#!/bin/sh
+#
+# make the hash functions
+#
+
+gperf el_hash.gperf > el_hash.h
+gperf get_prop_hash.gperf > get_prop_hash.h
+gperf set_prop_hash.gperf > set_prop_hash.h
+gperf has_hash.gperf > has_hash.h
+gperf notint_hash.gperf > notint_hash.h

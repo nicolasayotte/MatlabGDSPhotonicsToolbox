@@ -1,0 +1,73 @@
+#!/usr/local/bin/octave -q
+#
+# Merge several GDS II layout files into one file. The script is a 
+# bit simplistic and does not replace structure names that are not 
+# unique. User and database units are 1e-6 m and 1e-9 m respectively.
+#
+# Example:  gdsmerge NEWTOP *.gds
+#
+# Ulf Griesmann, December 2012
+
+# check if we have a file name
+if ~nargin
+   fprintf('\nUsage   :  gdsmerge [top structure] <output file> <list of file names>\n');
+   fprintf('Example :\n');
+   fprintf('             gdsmerge NEWTOP demo.gds *.gds\n');
+   fprintf('Notes :\n');
+   fprintf(' *  If the first command line argument does not have a .gds file extension,\n');
+   fprintf('    it is assumed to be the name of the new top level structure.\n');
+   fprintf('    The default name for the top structure is NEWTOP.\n');
+   fprintf(' *  The first file name with .gds file extension is the output file name.\n');
+   fprintf('    It must not exist. If the file exists, the program exits.\n');
+   exit(-1);
+endif
+
+# get command line arguments
+arg_list = argv();
+
+# check if first argument has .gds or .GDS in it
+first = tolower(arg_list{1});
+if isempty( strfind(first, '.gds') )
+   tsnam = arg_list{1};
+   oname = arg_list{2};
+   sidx = 3;
+else
+   tsnam = 'NEWTOP';
+   oname = arg_list{1};
+   sidx = 2;
+endif
+
+# make sure output file does not exist
+[fd,msg] = fopen(oname, 'r');
+if fd ~= -1 # file exists
+   fclose(fd);
+   fprintf('\nError :  cannot overwrite existing output file.\n');
+   exit
+endif
+
+# create new top level structure
+top = gds_structure(tsnam);
+
+# create a new library
+newlib = gds_library([tsnam,'.DB'], 'uunit',1e-6, 'dbunit',1e-9);
+
+# process input files
+for k=sidx:nargin
+  
+   # read a library
+   lib = read_gds_library(arg_list{k});
+   
+   # add its structures to the new library
+   newlib = add_struct(newlib, lib(1:end));
+   
+   # and create a reference in the new top level structure
+   # to the old top level structure(s)
+   top = add_ref(top, topstruct(lib));
+   
+endfor
+
+# add the new top level structure to the library
+newlib = add_struct(newlib, top);
+
+# and write the new library to a file
+write_gds_library(newlib, oname);

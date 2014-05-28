@@ -1,0 +1,35 @@
+%{
+/* hash function for element property access
+ *
+ * process with:
+ *    gperf set_prop_hash.gperf > set_prop_hash.h
+ *
+ * NOTE: this software is in the Public Domain
+ * Ulf Griesmann, July 2013
+*/
+%}
+%language=ANSI-C
+%struct-type
+
+struct keyword {
+   char *name;
+   void (*set_prop_func)(element_t *, mxArray *);
+};
+
+%%
+elflags, &set_elflags
+plex,    &set_plex
+layer,   &set_layer
+dtype,   &set_dtype
+ptype,   &set_ptype
+ttype,   &set_ttype
+btype,   &set_btype
+ntype,   &set_ntype
+width,   &set_width
+ext,     &set_ext
+font,    &set_font
+verj,    &set_verj
+horj,    &set_horj
+strans,  &set_strans
+sname,   &set_sname
+adim,    &set_adim

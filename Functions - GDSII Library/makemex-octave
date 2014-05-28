@@ -1,0 +1,44 @@
+#!/bin/sh
+#
+# shell script to compile .mex functions in Linux/Unix
+#
+
+export CFLAGS='-O3 -march=native -fomit-frame-pointer'
+
+cd Basic/gdsio
+mkoctfile --mex -s gds_open.c mexfuncs.c
+mkoctfile --mex -s gds_close.c mexfuncs.c
+mkoctfile --mex -s gds_ftell.c mexfuncs.c
+mkoctfile --mex -s gds_structdata.c gdsio.c mexfuncs.c
+mkoctfile --mex -s gds_libdata.c gdsio.c mexfuncs.c
+mkoctfile --mex -s gds_beginstruct.c gdsio.c mexfuncs.c
+mkoctfile --mex -s gds_endstruct.c gdsio.c mexfuncs.c
+mkoctfile --mex -s gds_beginlib.c gdsio.c mexfuncs.c
+mkoctfile --mex -s gds_endlib.c gdsio.c mexfuncs.c
+mkoctfile --mex -s gds_write_element.c gdsio.c mexfuncs.c
+mkoctfile --mex -s gds_read_element.c gdsio.c mexfuncs.c mxlist.c
+mkoctfile --mex -s gds_record_info.c gdsio.c mexfuncs.c
+rm *.o
+
+cd ../@gds_element/private
+mkoctfile --mex -s poly_iscwmex.c
+mkoctfile --mex -s -I../../gdsio isref.c
+mkoctfile --mex -s -I../../gdsio get_etype.c
+mkoctfile --mex -s -I../../gdsio is_not_internal.c
+mkoctfile --mex -s -I../../gdsio new_internal.c
+mkoctfile --mex -s -I../../gdsio has_property.c
+mkoctfile --mex -s -I../../gdsio get_element_data.c ../../gdsio/mexfuncs.c
+mkoctfile --mex -s -I../../gdsio set_element_data.c ../../gdsio/mexfuncs.c
+rm *.o
+
+cd ../../../Structures/private
+mkoctfile --mex -s datamatrixmex.c
+rm *.o
+
+cd ../../Boolean
+mkoctfile --mex -s poly_boolmex.cpp clipper.cpp
+rm *.o
+
+cd ..
+
+

@@ -1,0 +1,768 @@
+2014-March-26, Ulf Griesmann
+- version 114a
+- removed the General Polygon Clipper library. Boolean operations are
+  now based on the Clipper library by Angus Johnson only.
+
+2014-March-16, Ulf Griesmann
+- version 113a
+- new version 6.1.x of clipper library for Boolean polygon 
+  operations.
+
+2014-January-15, Ulf Griesmann
+- versin 112a
+- eliminate global variable in '@gds_library/treecopy.m' and
+  '@gds_library/subtree.m' and use nested functions instead.
+  Requires Octave 3.8. Should be a bit faster.
+
+2013-December-18, Ulf Griesmann
+- version 111s
+- fixed a long standing bug in '@gds_structure/add_ref.m'. When the 
+  second argument is a cell array of structures, references to the
+  names of the top level structure(s) in the array are created. This 
+  change finally makes the function what it should have been all along.
+- added an option to 'topstruct.m' to make it always return a cell array. 
+
+2013-December-16, Ulf Griesmann
+- version 111r
+- fixed a bug in 'Structures/gdsii_multref.m'.
+
+2013-November-20, Ulf Griesmann
+- version 111p
+- new function 'gdsii_multref.m' in 'Structures'
+  directory which simplifies the creation of layouts with
+  many replicated structures, but is not restricted to
+  a grid.
+
+2013-November-15, Ulf Griesmann
+- version 111o
+- fixed an error message in 'gds_write_element.c'
+- don't use C++ style comments because less recent versions
+  of gcc don't like them.
+
+2013-October-09, Ulf Griesmann
+- version 111n
+- begin a FAQ.
+
+2013-October-02, Ulf Griesmann
+- version 111m
+- fixed a bug in @gds_element/display.m. strans records were
+  not displayed correctly when the optional MAG or ANGLE records
+  were not present.
+
+2013-September-22, Ulf Griesmann
+- version 111k
+- streamlined method @gds_structure/add_ref.m
+
+2013-September-18, Ulf Griesmann
+- version 111i
+- no longer return the record length in 'gds_record_info.c' when it is
+  not needed; bit faster, because the variable 'rlen' no longer needs 
+  to be created.
+- method 'numel' for the 'gds_library' class returns the number of
+  elements in a library.
+
+2013-September-11, Ulf Griesmann
+- version 111h
+- better error messages in gds_element constructor.
+
+2013-September-3, Ulf Griesmann
+- version 111e,f,g
+- fixed: a MATLAB-only bug in the gds_element class constructor (actually
+  a MATLAB vs. Octave incompatibility: Octave consistently treats an empty matrix like 
+  an empty string; MATLAB does not. Empty matrices are accepted e.g. in strcmp, but
+  not in switch statements.)
+- fixed a quirk in mxlist.c which makes it easier to call get_current_entry 
+- MSC compiler did not compile the new byte swapping functions correctly (!).
+- use the generic Excess64 <--> IEEE 754 float conversion functions for MSC.
+
+2013-September-2, Ulf Griesmann
+- version 111b,c,d
+- fixed a bug in @gds_library/subsref.m relating to field name
+  indexing of structures in a library
+- added a method @gds_library/snames.m which returns the names
+  of structures in a library and a struct enabling fast structure
+  lookup using structure names (the problem, though, is that not all valid
+  GDS II variable names are valid MATLAB/Octave variable names).
+- fixed a bug introduced in version 107a. The idiom S(:) for
+  copying all elements of a structure and L(:) for copying all structures 
+  of a library now works.
+- better help text for 'write_gds_library' function.
+
+2013-September-1, Ulf Griesmann
+- version 111a
+- Improved functions for byte swapping. The inline functions compile
+  to 'bswap' instructions with GCC. 
+- use faster floating point number conversion functions 
+  excess-64 <--> IEEE754. Results in significant speedup with elements
+  that have float-value properties (e.g. sref).
+
+2013-August-23, Ulf Griesmann
+- version 110a
+- rewrote get_element_data.c and set_element_data.c by replacing the jump
+  tables with arrays of function pointers within the hash functions to eliminate
+  the double property lookup in the previous versions. Clean, and also faster.
+- several small fixes, especially in error messages here and there.
+- enable array indexing to access the xy property of elements 
+  (see @gds_element/subsref.m).
+
+2013-August-22, Ulf Griesmann
+- version 109e
+- remove .o files after compiling mex files on Octave / Windows
+
+2013-August-21, Ulf Griesmann
+- version 109d
+- improvements in read_gds_library.m
+- corrected usage message in 'cgdsconv' script
+
+2013-August-19, Ulf Griesmann
+- version 109b,c
+- fixed bugs in writing compound sref elements.
+- several small bug fixes.
+- 'cgdsconv' Octave script to convert files in compound GDS (.cgds)
+  format into standard GDS II (.gds) files. 
+
+2013-August-18, Ulf Griesmann
+- version 109a
+- libraries can be stored in a new compound GDS format with file
+  extension .cgds. In the new format, boundary, path, and sref elements
+  can have multiple XY records. When reading the library, the multiple
+  XY records are read into compound elements. .cgds files are more compact
+  and much easier to read into Octave/MATLAB in some cases, e.g. in layouts
+  with very large numbers of sref elements.
+
+2013-August-14, Ulf Griesmann
+- version 108b
+- no longer print top level structures after reading a library even in
+  verbose mode. For a library with many sref elements, it can take
+  "forever".
+
+2013-August-14, Ulf Griesmann
+- version 108a
+- new gds_ftell mex function
+- better progress reporting with % of file read.
+- fixed a bug in @gds_element/get.m
+
+2013-August-13, Ulf Griesmann
+- version 107b-107c
+- replace snprintf --> sprintf because Microsoft's C libraries don't 
+  have snprintf.
+- fix makemex.m and omakemex.m scripts for Windows.
+
+2013-August-12, Ulf Griesmann
+- version 107a
+- omakemex.m script to make mex files on Octave/Windows
+- fixed a bug in @gds_element/add_poly.m
+- fixed bug in gdsii_bitmap.m; sref elements don't have layer
+  properties.
+- big change: store most element properties in a C structure that is
+  accessible through a set of mex functions to make the toolbox much
+  more memory efficient, especially for layouts with large numbers of
+  sref elements (several 100 Million). Should be faster too.
+- hash tables are used to access element properties.
+- make the idiom X(:) work for gds_structure and gds_library objects 
+- fix bug in 'gdsii_cdfeature.m': sref elements don't have a layer property.
+
+2013-July-20, Ulf Griesmann
+- version 106e
+- fixed a bug in gds_write_element.c. plex numbers of box elements
+  were not written correctly.
+
+2013-July-14, Ulf Griesmann
+- version 106d
+- update the clipper library for polygon algebra to 
+  version 5.1.6
+
+2013-July-10, Ulf Griesmann
+- version 106c
+- small fixes to cleanup and makemex-octave scripts.
+
+2013-June-27, Ulf Griesmann
+- version 106b
+- better summary printout in 'gds_peek'.
+
+2013-June-27, Ulf Griesmann
+- version 106a
+- new function 'gds_cat.m' to merge layout files. The new
+  function is able to merge very large layout files (10GB or more)
+  by copying the files structure by structure without holding entire
+  libraries in memory. It's slow, but it gets there.
+- function 'gds_peek.m' which scans a GDS II file and prints out
+  structure names within it and element statistics. Can inspect
+  very large files because only structures are read into memory, not 
+  the entire library.
+- little fixes here and there.
+
+2013-April-22, Ulf Griesmann
+- version 105e
+- fixed the help text for 'Structures/gdsii_replicate.m'
+
+2013-March-22, Ulf Griesmann
+- version 105d
+- fixed a bug in gds_write_element.c that resulted in a 
+  segmentation fault when the number of vertices in a 
+  boundary element was > 4096.
+
+2013-February-25, Ulf Griesmann
+- version 105c
+- modified 'datamatrixmex.c' to make it compile on older
+  versions of GCC (contributed by Patrick Gill).
+- modified 'gdsio.c' to work with older versions of GCC.
+- renamed 'file_exist.m' --> 'gds_file_exists.m' to make
+  a function name collision less likely.
+
+2013-February-9, Ulf Griesmann
+- version 105b
+- removed gdsii_layer global variable from functions
+  in the Elements directory.
+
+2013-February-4, Ulf Griesmann
+- version 105a
+- D'OH ... need to open files with 'b' on Windows. Now it
+  works with MATLAB too.
+- improved / renamed some of the Octave scripts.
+
+2013-February-1, Ulf Griesmann
+- version 104a
+- at long last found the bugs in reading and writing of
+  the bitarray records STRANS and PRESENTATION. They are 
+  not documented correctly (or documented confusingly) in 
+  the documentation from Klaas Holwerda.
+
+2013-January-31, Ulf Griesmann
+- version 103a
+- fixed reading of element properties.
+- STRANS bitfield is mandatory and will always
+  be written even if no bits are set.
+- fixed path extensions for path type 4.
+- fixed text alignment
+- several fixes in @gds_element/display.m (especially
+  for text elements).
+Problem: does not run on MATLAB - reason unknown.
+
+2013-January-30, Ulf Griesmann
+- version 102[cde]
+- more bug fixes in mex functions.
+
+2013-January-27, Ulf Griesmann
+- version 102b
+- lots of small bug fixes, and a big
+  bug in gdsio.c
+
+2013-January-22, Ulf Griesmann
+- version 102a
+- MSVS C compiler does not understand 'inline'; only
+  inline functions with GNU C.
+- fixed several bugs in 'gds_write_element.c'
+- fixed bugs in 'gds_initialize.m'.
+- gave up on Makefile for Octave and use 'makemex-octave'
+  script again; it's easier and less error prone.
+- removed the 'gdsii_deflayer.m' function. The notion
+  of a 'default layer' is now gone. 
+
+2013-January-21, Ulf Griesmann
+- version 101a
+- on Linux the mex files can now be build with 'make'.
+- small bug fixes.
+
+2013-January-19, Ulf Griesmann
+- version 100a
+- low level I/O is now done with a set of mex functions
+  which bypasses the MATLAB/Octave fwrite/fread functions.
+  Approximately 4x - 5x faster than the original pure 
+  Octave/Matlab I/O functions.
+- fixed calculation and display of elapsed time during
+  reading and writing of library files. 
+- new version of Clipper library (5.0.3).  
+- correctly handle ELFLAGS records.
+
+=============
+
+2013-February-2, Ulf Griesmann
+- version 99a
+- Finally set the correct bits in the bitarray
+  records STRANS and PRESENTATION (see version 104a).
+
+2013-January-30, Ulf Griesmann
+- version 98a
+- no longer write out angles and magnifications
+  in STRANS records that have default values. Makes
+  writing files with many sref elements faster.
+
+2013-January-27, Ulf Griesmann
+- version 97c
+- re-instate the 'poly_convert' name for
+  structure and library polygon conversion methods. 
+
+2013-January-23, Ulf Griesmann
+- version 97b
+- re-instate reading of fonts (but we don't do 
+  anything with them).
+
+2013-January-22, Ulf Griesmann
+- version 97a
+- no longer prints out top level structures by default
+  when writing a file, because it can be very time 
+  consuming to calculate the top level structures when
+  the library contains a large number of reference elements.
+
+2012-December-28, Ulf Griesmann
+- version 96a
+- skip unknown records in the library header instead
+  of stopping.
+- new 'srename' method for gds_library objects to 
+  rename a structure and all references to the structure
+  in a library.
+- boundary and path elements always store polygons in a cell
+  array even if they have only one polygon. This much simplifies
+  several methods in the gds_element class.
+
+2012-December-21, Ulf Griesmann
+- version 95e
+- small fix in gdsii_aref.m - added missing ';'
+- print out read and write times in HH:MM:SS.FFF format.
+
+2012-December-15, Ulf Griesmann
+- version 95c
+- polygon algebra functions check for empty polygons.
+
+2012-December-14, Ulf Griesmann
+- version 95b
+- layerinfo.m can't be a method, moved it to 'funcs'.
+- small cleanup in 'gdsii_path.m"
+
+2012-December-9, Ulf Griesmann
+- version 95a
+- fixed a long standing bug: elements can have more
+  than one property (attribute/value pair).
+
+2012-December-8, Ulf Griesmann
+- version 94e
+- added a function 'topstruct.m' that returns the
+  top level structure(s) of a cell array of gds_structure
+  objects.
+
+2012-December-7, Ulf Griesmann
+- version 94d
+- fixed a bug in 'parse_element_data.m'
+- improved '@gds_structure/add_ref.m': default reference
+  position is [0,0]; a cell array of structure elements
+  can now be passed as the 2nd argument, which creates
+  reference elements for all of them.
+- remove all calls to 'reshape' from the basic io functions.
+
+2012-December-6, Ulf Griesmann
+- version 94c
+- fixed find_ref.m to make sure it does not consume
+  a large amount of memory with layouts that have
+  very many reference elements.
+
+2012-December-1, Ulf Griesmann
+- version 94b
+- reinstated subtree, which now returns indices of structures
+  in a library object that make up a subtree. All tools needed
+  to work with structure graphs are now provided.
+- renamed gds_io directory to gdsio. Looks better.
+
+2012-November-30, Ulf Griesmann
+- version 94a
+- renamed subtree.m --> treecopy.m
+- function @gds_library/private/adjmatrix.m which computes
+  the structure graph now uses a sparse matrix. Slightly slower
+  but the structure graph for layouts with thousands of structures
+  can now be calculated.
+
+2012-November-29, Ulf Griesmann
+- version 93c
+- library writing was broken on MATLAB because 'zeros'
+  works with 'logical' only in Octave.
+  
+2012-November-25, Ulf Griesmann
+- version 93b
+- oops. Broke 'read_gds_library.m'
+
+2012-November-25, Ulf Griesmann
+- version 93a
+- move all low-level I/O functions into a directory 'Basic/gds_io'
+  in preparation of rewriting much of the low-level IO as mex 
+  functions to make IO fast.
+- cleaned up and corrected writing and reading of REFLIBS and 
+  ATTRTABLE records - even though they are not likely to be used
+  much, if ever ...
+
+2012-November-20, Ulf Griesmann
+- version 92a
+- new methods 'poly_iscw' and 'poly_cw' for the gds_element class
+  to query and modify polygon orientation in boundary elements
+- 'read_gds_library' only prints the top level structure in 
+  verbose mode, because calculating the top level structure is
+  quite slow in layouts with many sref elements.
+- 'Scripts' directory with useful Octave script(s) that can be run
+  directly from a shell prompt in Linux / Unix environments
+  (real or emulated).
+- improve 'poly_convert' for structures and rename to 'polygonize'. 
+  Now ignores text elements.
+- use 'logical' data type for the adjacency matrix in 'adjmatrix.m'. 
+  Not faster but uses a lot less memory, which matters for layouts
+  with thousands of structures.
+- create layout file with 'W' in 'gdsii_initialize.m' in MATLAB, which
+  suppresses buffer flushing after each call to fwrite.
+- in poly_boolmex.c and poly_boolmex.cpp return the hole flags as a 
+  logical array instead of double.
+
+2012-November-16, Ulf Griesmann
+- version 91a
+- lower the default verbosity in 'read_gds_library', because
+  printing the structure names is impractical for layouts with
+  thousands of structures.
+- 'layerstat' function to display information about distribution of
+  elements over layers.
+- fixed a bug in 'gdsii_read_boundary.m'.
+
+2012-November-13, Ulf Griesmann
+- version 90b
+- try to deallocate memory in poly_boolmex.cpp
+- latest version 4.9.6 of Clipper library.
+
+2012-November-12, Ulf Griesmann
+- version 90a
+- better directory structure for the toolbox.
+- better scripts for making the mex files.
+- the old procedural way of creating GDS II layout
+  files is no longer supported. All higher level
+  functions now only return objects.
+- 'noel' and 'gf' arguments removed from 'gdsii_ptext'.
+- 'gf' argument removed from 'gdsii_arc'.
+- removed 'gf' argument from 'gdsii_bitmap'.
+- removed 'gf' argument from 'gdsii_datamatrix' and
+  added 'sname' argument for name of top level structure.
+- removed 'gf' argument from 'gdsii_grating'.
+- removed 'gf' argument from 'gdsii_replicate'; fixed a bug.
+- removed 'gf' argument from 'gdsii_sierpinski'.
+- removed 'gf' argument from 'gdsii_checky'.
+- removed 'gf' argument from 'gdsii_cdfeature'.
+- removed 'gf' argument from 'gdsii_pattern'.
+- '@gds_structure/add_ref.m' did not correctly generate aref
+  elements; fixed.
+
+2012-November-10, Ulf Griesmann
+- version 88a
+- renamed polyboolmex.* --> poly_boolmex.* 
+- polygon clipping can now be done with the Clipper
+  library by Angus Johnson (this is the preferred way).
+- small bug fixes.
+
+2012-November-05, Ulf Griesmann
+- version 87b
+- Microsoft C is not C99 conformant, does not have 'round'.
+  Change to 'floor + 0.5' so that polyboolmex.c compiles.
+
+2012-November-04, Ulf Griesmann
+- version 87
+- fixed bugs in 'gdsii_arc.m'. Full circles are now rendered correctly.
+- warning when path elements have > 4095 vertices.
+- display number of paths in a compound path element.
+- make 'write_gds_library' more talkative by default.
+- fixed a quirk in 'gdsii_read_strans.m'.
+- overload the '+' operator for the gds_element class. This can be used 
+  to combine boundary, path, and sref elements on the same layer into 
+  compound elements.
+- fixed a bug in 'gdsii_units'.
+- rewrote 'polyboolmex.c' for the GPC library to take full advantage of the 
+  GPC library and to make it compatible with the mex function for the Clipper 
+  library. The new mex function should be faster too when clipping many polygons.
+
+2012-August-26, Ulf Griesmann
+- version 86
+- 'poly_bool' method for the gds_element class for boolean set algebra 
+  on GDS boundary elements. Currently only the GPC library is used, 
+  eventually it will also be possible to use the Clipper library, 
+  which has a less restrictive license.
+- full support for paths having more than one path segment
+  (= compound paths, a GDS II toolbox extension)
+
+2012-August-22, Ulf Griesmann
+- version 85
+- very long paths with up to 8191 vertices are now possible.
+- compound path elements containing more than one polygon are
+  now supported.
+
+2012-July-31, Ulf Griesmann
+- version 84
+- changed gdsii_excess64dec.c so that it can be compiled
+  with the C compiler (LCC) that comes with MATLAB.
+- small tweaks here and there
+
+2012-January-29, Ulf Griesmann
+- version 83
+- use structure array instead of structure cell array in 'gdsii_ptext.m' for
+  the glyph data.
+- replace for loops with 'cellfun' in write_library.m and write_structure.m
+- minor cleanup in read_gds_library.m
+- simplified 'poly_rotz' function in gdsii_ptext.m
+- made @gds_structure/subsasgn.m simpler and a bit faster.
+- made @gds_structure/add_element.m simpler and a bit faster.
+- avoid calls to subsasgn.m in gdsii_read_struct.m to make function faster.
+  Speedup > 10x for some files with many elements.
+- fixed a bug in gdsii_elflags.m
+- fixed a bug in gdsii_plex.m
+- eliminate 'bitget' and 'bitset' and replace them with 'bitor' and 'bitand'
+  equivalents. Under Octave this results in a x2 speedup for library files with
+  many STRANS records because 'bitset' and 'bitget' are very slow.
+
+2012-January-14, Ulf Griesmann
+- version 82
+- small changes, several fixes in the help texts.
+
+2012-January-08, Ulf Griesmann
+- version 81
+- path extensions are initialized to 0 for type 4 paths.
+- all ASCII characters from 32 to 126 are now supported
+  in 'gdsii_ptext.m' and several characters were tweaked 
+  to look better.
+
+2012-January-04, Ulf Griesmann
+- version 80
+- bug fix: bit array of strans records was written wrong.
+- bug fix: rows and colums of aref elements were read in the wrong order.
+- there are still some more bugs ...
+
+2012-January-02, Ulf Griesmann
+- version 79
+- modified gdsii_initialize.m to store the correct library name in the 
+  GDS II files, not merely the file name.
+
+2011-December-27, Ulf Griesmann
+- version 78
+- fixed bug in gdsii_path.m :  path extensions were written at 
+  the wrong place in the record.
+- tweak to @gds_element/display.m :  not all elements have a layer
+  property.
+- small change to CD feature; space between 0.9 um and 0.8 um feature
+  is larger.
+- fixed a couple of small bugs in gdsii_path.m: 'width' and 'ptype' are
+  optional.
+
+2011-December-20, Ulf Griesmann
+- version 77
+- fixed a bug in @gds_library/get.m
+- fixed a bug in @gds_library/add_struct.m
+- fixed bug in gdsii_cdfeature.m. Now works
+  for all user units, not only 1 um.
+
+2011-December-18, Ulf Griesmann
+- version 76
+- fixed a bug in the get methods for the gds_structure and
+  gds_library classes.
+- deriving the file name from the library name works better now.
+- updated manual/tutorial.
+
+2011-December-16, Ulf Griesmann
+- version 75
+- fixed more bugs in file reading. gdsii_read_box actually
+  created a node element - and vice versa. Not that either of
+  these seems very useful ...
+- speeded up file reading by about 25% by bypassing error checking
+  when reading a file. It's still too slow when many elements 
+  must be read - but that's MATLAB.
+
+2011-December-15, Ulf Griesmann
+- version 74
+- improved the poly_path method; it is now twice as fast 
+  as before.
+- tweaked the display of library and structure dates
+- fixed bug in 'gdsii_read_text.m'. tverj and thorj 
+  were not initialized.
+- added support for path type 4 (finally figured out how).
+- check if all structure names are unique before writing
+  a library file.
+- add_poly method to add more polygons to a boundary element.
+
+2011-December-14, Ulf Griesmann
+- version 73
+- speed up computation of the adjacency matrix of the
+  structure tree a lot. It's now fast enough even when
+  a library contains a substantial number of structures.
+
+2011-December-13, Ulf Griesmann
+-version 72
+- made 'find' method for 'gds_structure' elements simpler
+  again. Makes treeview method faster.
+- gdsii_ptext.m can also return the raw polygons instead of a 
+  boundary element which is sometimes useful.
+- fixed a bug in 'gdsii_path.m': path type was not initialized
+  to 0.
+- fixed a bug in the 'add_element' method for structures.
+- fixed a bug in @gds_structure/set.m: Matlab doesn't like !=
+- fixed a bug in 'read_gds_library.m': use & instead of &&
+- made the 'adjmatrix.m' function simpler and a lot faster. This
+  uses a new 'findref' method that is used to identify reference
+  elements in structures.
+- made subsref.m method for elements simpler and faster. 
+  It can no longer be used to query the element type, but this
+  can still be done with the 'is_etype' and 'get' methods.
+- added methods poly_box, poly_text, and poly_path to the gds_element
+  class for converting these elements to boundary elements. 
+- added the poly_convert method the gds_structure class for convenient 
+  conversion of box, path, and text elements to equivalent boundary
+  elements.   
+
+2011-December-06, Ulf Griesmann
+- version 71
+- use the DEPLOF lithography font (David Elata, MEMS Lab, Technion, Haifa,
+  Israel) which has upper and lower case letters, numerals, and punctuation
+  characters.
+- methods add_struct and add_ref for gds_structure objects and
+  add_struct for gds_library objects to make it easier to construct
+  structure hierarchies.
+
+2011-December-3, Ulf Griesmann
+- version 70
+- no longer ignore the structure date fields
+- unrecognized element properties are now ignored and
+  file reading continues with a warning.
+- set method for the gds_structure class
+- iterators 'libraryfun.m' and 'structfun.m' for the gds_library
+  and gds_structure classes.
+- treeview method for gds_library objects to display the structure
+  hierarchy
+- subtree method to for copying a structure from a library together
+  with all referenced structures.
+- topstruct method for gds_library objects to display the name(s)
+  of the top level structure(s)
+- removed the 'horzcat' method for gds_structure objects, because it
+  does not seem possible to implement it in a clean way.
+
+2011-November-29, Ulf Griesmann
+- version 69
+- faster reading of libraries (as fast as possible in pure Matlab/Octave)
+- fixed several bugs in reading functions which caused element properties
+  to be set wrong when reading a library.
+
+2011-November-28, Ulf Griesmann
+- version 67, 68
+- fixed two bugs (use of '!=' for not equal) that work on 
+  Octave but not in MATLAB.
+
+2011-November-26, Ulf Griesmann
+- version 66
+- fixed a bug in gdsii_cdfeature.m, it still used the removed
+  'add' method.
+
+2011-November-26, Ulf Griesmann
+- version 65
+- fixed an error in the 'makemex.m' script.
+- corrected small error in 'gdsii_arc.m'
+- fixed bug in write_gds_library (missing ;)
+
+2011-November-26, Ulf Griesmann
+- version 64
+- more bug fixes, writing now seems to work as before
+- debugged the reading, works now. Still too slow ...
+- can specify file name for gds_library write method.
+- many example scripts
+
+2011-November-20, Ulf Griesmann
+- version 62
+- can overwrite existing files when the file name begins with '!'.
+- can read GDS II files.
+- find method for flexible filtering of elements in structures.
+- very many bug fixes
+
+2011-July-22, Ulf Griesmann
+- version 61
+- fix 'makemex.m' script.
+
+2011-July-16, Ulf Griesmann
+- version 60
+- existing files are no longer overwritten. Instead, a backup
+  of existing library files is made.
+- The REFLIBS record in the library file header is supported. External 
+  structures can now be used.
+- The order of arguments for several functions was changed to make
+  the argument sequence uniform for all functions that write element data
+  to a library file.
+- An object oriented framework (gds_structure, gds_element) was added
+  to the toolbox to enable in-memory representation of a GDS II 
+  structure hierarchy. This is needed to make reading GDS II library files 
+  possible.
+- A document ("GDS II for the Rest of Us") explains the structure of GDS II
+  library file, and how to create and edit these files using the GDS
+  II toolbox.
+- Several example scripts.  
+
+2011-Nov-3, Ulf Griesmann
+- version 57
+- finally fixed 'gdsii_boundary'. All polygons are now closed.
+
+2011-Nov-1, Ulf Griesmann
+- version 56
+- fixed 'gdsii_boundary' to always close an open polygon.
+
+2011-Oct-24, Ulf Griesmann
+- version 55
+- removed 'gdsii_nistlogo' and incorporated the logo into 
+  the CD feature.
+- 'gdsii_datamatrix' and 'gdsii_bitmap' no longer take a position argument.
+
+2011-Oct-22, Ulf Griesmann
+- version 54
+- made fixed the bugs in the data matrix function 'gdsii_datamatrix'.
+  The function now encodes up to 300 characters of information.
+
+2011-Sept-26, Ulf Griesmann
+- version 52
+- corrected a bug in the 'gdsii_arc.m' function.
+
+2011-Jun-10, Ulf Griesmann
+- version 51
+- updated 'gdsii_checky' to use integer numbers by default. The format
+  can now be specified as an option, as can the height of the label.
+
+2011-Jun-09, Ulf Griesmann
+- version 50
+- made the resolution feature more sophisticated with a "negative" line
+  between two larger exposed areas.
+
+2011-Apr-23, Ulf Griesmann
+- version 48
+- fixed a bug in 'gdsii_checky'
+- 'gdsii_grating' can generate gratings with different duty cycles.
+- 'gdsii_bitmap' now writes the bitmap in correct orientation.
+
+2011-Mar-26, Ulf Griesmann
+- version 46
+- fixed the bugs in gdsii_bitmap
+
+2011-Mar-23, Ulf Griesmann
+- version 45
+- bitmap can use a pixel defined by an external structure.
+
+2011-Mar-04, Ulf Griesmann
+- version 42
+- 'gdsii_arc' can be used to create complete circles
+
+2011-Feb-28, Ulf Griesmann
+- version 41
+- added function 'gdsii_bitmap', which converts a bitmap into
+  a GDS II structure.
+- 'gdsii_datamatrix' uses 'gdsii_bitmap'.
+
+2011-Feb-26, Ulf Griesmann
+- version 40
+- added function 'gdsii_arc'.
+- cleaned up help texts. References to 'gdsii_start' replaced with
+  'gdsii_initialize'.
+
+2011-Feb-20, Ulf Griesmann
+- streamline 'gdsii_datamatrix'.
+- 'gdsii_sref' now can place several reference records at once.
+- 'gdsii_cdfeature' uses scaled references instead of boundaries.
+- 'gdsii_initialize' sets the stream file version to 7 instead of 3.
+- 'gdsii_finalize' does not write version information by default.
+
+2011-Feb-07, Ulf Griesmann
+- added better version control and a function which returns toolbox version
+  and version of the interpreter that is running it.
+- always write version information into a top level structure at the end of
+  the layout file.
+  

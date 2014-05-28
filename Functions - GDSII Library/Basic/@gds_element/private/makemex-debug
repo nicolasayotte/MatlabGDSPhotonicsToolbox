@@ -1,0 +1,14 @@
+#!/bin/sh
+#
+# compiles .mex functions in Linux/Unix for debugging
+#
+export CFLAGS='-g -Wall'
+mkoctfile --mex -g -Wall -I../../gdsio isref.c
+mkoctfile --mex -g -Wall -I../../gdsio get_etype.c
+mkoctfile --mex -g -Wall -I../../gdsio is_not_internal.c
+mkoctfile --mex -g -Wall -I../../gdsio new_internal.c
+mkoctfile --mex -g -Wall -I../../gdsio has_property.c
+mkoctfile --mex -g -Wall -I../../gdsio get_element_data.c ../../gdsio/mexfuncs.c
+mkoctfile --mex -g -Wall -I../../gdsio set_element_data.c ../../gdsio/mexfuncs.c
+mkoctfile --mex -g -Wall poly_iscwmex.c
+rm *.o
