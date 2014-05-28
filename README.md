@@ -1,8 +1,8 @@
 MatlabGDSPhotonicsToolbox
 =========================
-MIT License
+This software is under the MIT license. (Very public)
 
-This is a Matlab library of functions to facilitate the design of Photonics Integrated Circuits GDS layout.
+This is a Matlab library of functions to facilitate the design of Photonics Integrated Circuits GDS layouts.
 
 This is oriented towards intuitive and adaptable creation of GDS layout files for fabrication in different facilities across the world. The toolbox creates a GDS based on a custom layer map, but can be set up to export to any other layer map once the design is done.
 
