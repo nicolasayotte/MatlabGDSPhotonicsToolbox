@@ -23,6 +23,15 @@ Features:
 It is strongly encouraged to get the free software KLayout to look at your GDS files:
 http://www.klayout.de/
 
+First contact with the library :
+- There will be a PDF library presentation up soon!
+- Open the Functions - GDSII Library Folder
+- Verify run makemex (and possibly mex -setup before that) to compile the base library from Ulf.
+- Open Project - New Project
+- Run the Main.m, read ProjectDefinition.m
+- Go through the code of the cells and look at the resulting .gds files
+- Duplicate the Project folder and make your own!
+
 =========================
 Includes in the Functions - GDSII Library Folder :
 
