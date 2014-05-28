@@ -43,7 +43,7 @@ cols = size(layer, 2);
 sbend.group = false;
 sbend.distance = [];
 sbend.align = 'center';
-sbent.type = 'cladding';
+sbend.type = 'cladding';
 sbend = ReadOptions(sbend, varargin{ : });
 
 
@@ -68,9 +68,9 @@ end
 
 %% S-bend
 [structure, info] = PlaceRect(structure, info, lengthInput, wid, layer, datatype);
-[structure, info] = PlaceArc(structure, info, arcAngle, r, wid, layer, datatype, 'type', sbent.type);
+[structure, info] = PlaceArc(structure, info, arcAngle, r, wid, layer, datatype, 'type', sbend.type);
 [structure, info] = PlaceRect(structure, info, lengthCenter, wid, layer, datatype);
-[structure, info] = PlaceArc(structure, info, -arcAngle, r, wid, layer, datatype, 'type', sbent.type);
+[structure, info] = PlaceArc(structure, info, -arcAngle, r, wid, layer, datatype, 'type', sbend.type);
 [structure, info] = PlaceRect(structure, info, lengthOutput, wid, layer, datatype);
 
 return
