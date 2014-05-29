@@ -30,7 +30,7 @@ for sref = 1 : length(srefs)
   for index = 1 : length(refs)
     if(strcmpi(refs(index).cellname, get(srefs{sref}, 'sname')))
       isref = true;
-      continue;
+      break;
     end
   end
   
@@ -40,7 +40,7 @@ for sref = 1 : length(srefs)
     for index = 1 : length(cells)
       if(strcmpi(cells(index).inptop, get(srefs{sref}, 'sname')))
         iscell = true;
-        continue;
+        break;
       end
     end
     if iscell
