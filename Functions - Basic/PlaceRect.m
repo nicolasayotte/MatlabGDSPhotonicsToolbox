@@ -63,6 +63,7 @@ end
 %% Rectangle elements
 dwidth = 0.5 * (rect.endwidth - wid);    % make endwidth a differential value
 
+rectEl = cell(1, rows * cols);
 for row = 1 : rows
   if(len(row) > 1e-6)
     x1 = 0;
@@ -76,12 +77,12 @@ for row = 1 : rows
         else
           xy = [[x1; x2; x2; x1; x1], [y1; y1 + rect.offset(row) + dwidth(row, col); y2 + rect.offset(row) - dwidth(row, col); y2; y1]];
         end
-        rectEl = gds_element('boundary', 'xy', RotTransXY(xy, info.pos(row, : ), info.ori(row)), 'layer', layer(row, col), 'dtype', datatype(row, col));
-        structure = add_element(structure, rectEl);
+        rectEl{row + (col - 1) * rows} = gds_element('boundary', 'xy', RotTransXY(xy, info.pos(row, : ), info.ori(row)), 'layer', layer(row, col), 'dtype', datatype(row, col));
       end
     end
   end
 end
+structure = add_element(structure, rectEl(cellfun(@(x)~isempty(x), rectEl)));
 info.pos = info.pos + RotTransXY([len, rect.offset], [0, 0], info.ori);
 
 if(isempty(info.length)); info.length = zeros(rows, length(info.neff)); end

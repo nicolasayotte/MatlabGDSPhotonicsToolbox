@@ -94,6 +94,7 @@ end
 
 
 %% Arc elements
+arcEl = cell(1, rows * cols);
 for row = 1 : rows
   for col = 1 : cols
     
@@ -121,13 +122,13 @@ for row = 1 : rows
     
     arcxy = [shortSide; longSide(end : -1 : 1, : ); shortSide(1, : )];
     arcxy( : , 2) = arcxy( : , 2) + r;
-    arcEl = gds_element('boundary', 'xy', RotTransXY(arcxy, info.pos(row, : ), info.ori(row) + 180 * (ang(row) < 0)), 'layer', layer(row, col), 'dtype', datatype(row, col));
-    structure = add_element(structure, arcEl);
+    arcEl{row + (col - 1) * rows} = gds_element('boundary', 'xy', RotTransXY(arcxy, info.pos(row, : ), info.ori(row) + 180 * (ang(row) < 0)), 'layer', layer(row, col), 'dtype', datatype(row, col));
   end
   displacement = sign(ang(row)) * ([-sind(info.ori(row)), cosd(info.ori(row))] - [-sind(info.ori(row) + ang(row)), cosd(info.ori(row) + ang(row))]);
   info.pos(row, : ) = info.pos(row, : ) + r * displacement;
   
 end
+structure = add_element(structure, arcEl((cellfun(@(x)~isempty(x), arcEl))));
 info.ori = ConstrainAngle(info.ori + ang);  % ori E ]-180, 180]
 
 if(isempty(info.length)); info.length = zeros(rows, length(info.neff)); end
