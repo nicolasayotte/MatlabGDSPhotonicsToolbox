@@ -32,7 +32,6 @@ mex -O -I../../gdsio get_element_data.c ../../gdsio/mexfuncs.c
 mex -O -I../../gdsio set_element_data.c ../../gdsio/mexfuncs.c
 
 cd ../../../Structures/private
-mex -O datamatrixmex.c
 
 % Boolean functions
 fprintf('\n\n>>>>>\n');

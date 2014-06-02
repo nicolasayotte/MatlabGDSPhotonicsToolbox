@@ -91,14 +91,17 @@ for row = 1 : rows
           x1 = x1 + cumsum(tps);
         end
       end
-      x2 = x1 + obragg(row).period(col) * obragg(row).dc(col);
+      x2 = x1 + (obragg(row).period(col) + linspace(0, obragg(row).chirp(col), periods)') * obragg(row).dc(col);
       
       y1 = (-0.5 * obragg(row).w(col) - obragg(row).corw(col)) * ones(periods,1);
       y2 = y1 + obragg(row).w(col) + 2 * obragg(row).corw(col);
       
-      for kk = 1 : periods
-        grating{kk} = [x1(kk), y1(kk); x2(kk), y1(kk); x2(kk), y2(kk); x1(kk), y2(kk); x1(kk), y1(kk)];
+      if(exist('CornersToRects') == 3)
+         grating(1:periods) = CornersToRects(x1, x2, y1, y2);
+      else
+         grating(1:periods) = num2cell(reshape([x1, x2, x2, x1, x1, y1, y1, y2, y2, y1]', 5, 2, length(x1)), [1, 2]);
       end
+      
     end
     
     % Guide
