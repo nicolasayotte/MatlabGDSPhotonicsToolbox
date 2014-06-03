@@ -7,3 +7,5 @@ cd ..
 
 cd 'Functions - GDSII Library'
 makemex
+
+cd ..
