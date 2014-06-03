@@ -87,7 +87,7 @@ for row = 1 : rows
       x1 = cumsum(obragg(row).period(col) + linspace(0, obragg(row).chirp(col), periods)') - obragg(row).period(col);
       if(~isempty(obragg(row).phaseShift))
         if(~isempty(obragg(row).phaseShift(col).pos))
-          tps = zeros(periods,1); tps(round(obragg(row).phaseShift(col).pos * periods)) = obragg(row).phaseShift(col).value * obragg(row).period(col) / (2 * pi);
+          tps = zeros(periods,1); tps(round(find(x1 >= obragg(row).phaseShift(col).pos,1))) = obragg(row).phaseShift(col).value * obragg(row).period(col) / (2 * pi);
           x1 = x1 + cumsum(tps);
         end
       end
