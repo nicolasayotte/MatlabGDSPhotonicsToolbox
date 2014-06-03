@@ -26,7 +26,6 @@ glib.reflibs = [];  % external reference libraries
 glib.fonts = [];    % fonts
 glib.cdate = [];    % creation date
 glib.mdate = [];    % modification date
-glib.numst = 0;     % number of structures
 glib.st = {};       % cell array of structures
 glib.uunit = 1e-6;  % default user unit
 glib.dbunit = 1e-9; % default database unit
@@ -39,17 +38,13 @@ while length(varargin) > 0
    
    if isa(st, 'gds_structure')  % check if a structure
       glib.st{end+1} = st;
-      glib.numst = glib.numst + 1;
       varargin(1) = [];
       
    elseif iscell(st)            % check if it is a cell array of structures
-      for k = 1:length(st)   
-         if ~isa(st{k}, 'gds_structure'); 
-            error('gds_library :  can only add structures'); 
-         end
+      if ~all(cellfun(@(x)isa(x,'gds_structure'), st))
+         error('gds_library : at least one object in cell array is not a gds_structure.');
       end
       glib.st = [glib.st, st];
-      glib.numst = length(glib.st);
       varargin(1) = [];
       
    elseif ischar(st)

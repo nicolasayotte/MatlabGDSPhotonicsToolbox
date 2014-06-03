@@ -17,45 +17,34 @@ function [ostruc] = add_ref(istruc, struc, varargin);
 
 % Initial version, Ulf Griesmann, December 2011
 
-% copy input to output
-ostruc = istruc;
+   % copy input to output
+   ostruc = istruc;
 
-% get the structure name
-if ischar(struc)
-   sname = {struc};   
-elseif isa(struc, 'gds_structure')
-   sname = {struc.sname};
-elseif iscell(struc)
-   sname = topstruct(struc,1);
-else
-   error('gds_structure.add_ref :  second argument must be a string or gds_structure(s).');
-end
-
-% create reference elements
-for k = 1:length(sname)
-   if is_aref(varargin)
-      ostruc.el{end+1} = gds_element('aref', 'sname',sname{k}, varargin{:});
+   % get the structure name
+   if ischar(struc)
+      sname = {struc};   
+   elseif isa(struc, 'gds_structure')
+      sname = {struc.sname};
+   elseif iscell(struc)
+      if ~all(cellfun(@(x)isa(x,'gds_structure'), struc))
+         error('add_ref : at least one object in cell array is not a gds_structure.');
+      end
+      sname = topstruct(struc,1);
    else
-      ostruc.el{end+1} = gds_element('sref', 'sname',sname{k}, varargin{:});
+      error('gds_structure.add_ref :  second argument must be a string or gds_structure(s).');
    end
-end
-ostruc.numel = ostruc.numel + length(sname);
 
-return
-
-
-function is = is_aref(va)
-%
-% if one of the properties is 'adim', the element is
-% an aref element
-%
-for k=1:2:length(va)
-   if strcmp(va{k},'adim')
-      is = logical(1);
-      return
+   % 'adim' property present --> create aref elements
+   if any( strcmp(varargin(1:2:length(varargin)), 'adim') ) % create aref elements
+      rtype = 'aref';
+   else
+      rtype = 'sref';
    end
+   
+   % create reference elements
+   rel = cellfun(@(x)gds_element(rtype, 'sname',x, varargin{:}), sname, 'UniformOutput',0);
+   
+   % add them to output structure
+   ostruc.el    = [ostruc.el, rel];
+
 end
-
-is = logical(0);
-
-return

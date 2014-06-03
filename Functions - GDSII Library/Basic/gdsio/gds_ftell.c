@@ -25,7 +25,7 @@ mexFunction(int nlhs, mxArray *plhs[],
 	    int nrhs, const mxArray *prhs[])
 {
    FILE *fob;         /* file object pointer */
-   long int pos;
+   gdsint pos;
    double *pd;
 
    /* 
@@ -47,7 +47,7 @@ mexFunction(int nlhs, mxArray *plhs[],
    pos = ftell(fob);
    if (pos < 0)
       mexErrMsgTxt("failed to obtain file position with ftell().");
-   *pd = pos;
+   *pd = (double)pos;
 }
 
 /*-----------------------------------------------------------------*/

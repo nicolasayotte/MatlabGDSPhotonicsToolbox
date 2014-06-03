@@ -30,6 +30,4 @@ else
    error('gds_structure.add : argument must be gds_structure or cell array.');
 end
 
-olib.numst = numel(olib.st);
-
 return

@@ -10,6 +10,6 @@ function len = length(glib);
 
 % Ulf Griesmann, NIST, June 2011
 
-len = glib.numst;
+len = numel(glib.st);
 
 return

@@ -5,8 +5,22 @@ Octave / MATLAB Toolbox for GDS II Stream Format
 Ulf Griesmann, NIST, 2008 - 2014 
 ulf.griesmann@nist.gov, ulfgri@gmail.com
 
-This software is in the Public Domain, with the exception
-of the functions for Boolean set operations.
+
+All functions in this toolbox are in the Public Domain, with the following
+exceptions:
+
+- Boolean/clipper.hpp and Boolean/clipper.cpp are subject to the
+  Boost Software license 1.0: http://www.boost.org/LICENSE_1_0.txt
+
+- Structures/private/datamatrixmex.c is subject the GNU Public
+  License version 2: http://www.gnu.org/licenses/gpl-2.0.html
+
+- Basic/gdsio/convert_float_gcc.h is subject to the GNU Public
+  License version 3: http://www.gnu.org/copyleft/gpl.html
+  NOTE: This file is only used when the toolbox is compiled with
+  GCC, otherwise 'convert_float_generic.h' is used instead, which
+  is in the Public Domain.
+
 
 New versions of the toolbox can be downloaded from:
 

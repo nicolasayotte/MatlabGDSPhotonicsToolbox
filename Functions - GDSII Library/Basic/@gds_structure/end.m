@@ -16,6 +16,6 @@ if kide ~= 1 || nide ~= 1
    error('gds_structure :  has only one index.');
 end
 
-leidx = gstruc.numel;
+leidx = numel(gstruc.el);
 
 return

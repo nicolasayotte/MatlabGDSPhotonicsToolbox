@@ -43,7 +43,7 @@ if ~isempty(varargin)
          case 'compound'
             compound = valu;
          otherwise
-            error(sprintf('unknown property --> %s\n', prop));
+            error('unknown property --> %s\n', prop);
       end
    end
 end
@@ -63,7 +63,7 @@ if verbose == 1
    fprintf('\nLibrary name  : %s\n', glib.lname);
    fprintf('User unit     : %g m\n', glib.uunit);
    fprintf('Database unit : %g m\n', glib.dbunit);
-   fprintf('Structures    : %d\n\n', glib.numst);
+   fprintf('Structures    : %d\n\n', numel(glib.st));
 end
 
 % top level structures

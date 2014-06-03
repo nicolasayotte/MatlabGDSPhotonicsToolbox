@@ -5,8 +5,7 @@ function [bms] = gdsii_bitmap(bmap, pixel, sname, layer);
 %                a bitmap composed of black and white pixels.
 %
 % bmap :   matrix with elements 1 for black pixels and 0 for white
-%          pixels. When empty, a cell array containing
-%          gds_structure objects is returned.
+%          pixels. 
 % pixel :  A structure variable containing pixel width and height
 %          in user units 
 %               pixel.width

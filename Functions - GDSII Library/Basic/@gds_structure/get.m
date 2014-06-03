@@ -4,8 +4,7 @@ function s = get(gstruc, p);
 % get property method for GDS structures
 %
 % get(gstruc, 'sname') returns the structure name
-% get(gstruc, 'numel') returns the number of elements in the
-%                      structure
+% get(gstruc, 'cdate') returns the structure creation date
 % get(gstruc, k)       returns the k-th element in the structure
 % get(gstruc)          returns a cell array with all elements
 %

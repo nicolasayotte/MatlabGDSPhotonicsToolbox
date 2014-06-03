@@ -16,7 +16,7 @@ cad = ProjectDefinition(log);
 
 
 %% Merge all the GDS cells
-CastLayerMap(cad.outfil, 'TEST_fab', 'output', log);
+CastLayerMap(cad.outfil, cad.layermap, 'output', log);
 
 
 %% Close the log file

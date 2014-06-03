@@ -11,20 +11,18 @@ function [ostruc] = add_element(istruc, gelm);
 
 % Initial version, Ulf Griesmann, December 2011
 
-% copy input to output
-ostruc = istruc;
+   % copy input to output
+   ostruc = istruc;
 
-% and add the new element
-if isa(gelm, 'gds_element');
-   ostruc.el{end+1} = gelm;
+   % and add the new element
+   if isa(gelm, 'gds_element');
+      ostruc.el{end+1} = gelm;
    
-elseif iscell(gelm)
-   ostruc.el = [ostruc.el,gelm];
+   elseif iscell(gelm)
+      ostruc.el = [ostruc.el,gelm];
    
-else
-   error('gds_structure.add : input must be gds_element, gds_structure, or cell array.');
+   else
+      error('gds_structure.add : input must be gds_element, gds_structure, or cell array.');
+   end
+
 end
-
-ostruc.numel = numel(ostruc.el);
-
-return

@@ -23,6 +23,9 @@
 
 ----------------------------------------------------------
 
+- Define logical operators & and |, etc. for the gds_element class
+  to perform Boolean algebra. (DONE)
+
 - how to handle external libraries ? (NOT NEEDED)
 
 - new Clipper library 5.0.x (DONE)

@@ -16,6 +16,6 @@ if kide ~= 1 || nide ~= 1
    error('gds_library :  has only one index.');
 end
 
-lsidx = glib.numst;
+lsidx = numel(glib.st);
 
 return

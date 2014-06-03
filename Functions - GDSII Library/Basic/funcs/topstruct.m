@@ -5,10 +5,11 @@ function [ts] = topstruct(cas, bcell);
 %              in a cell array of gds_structure objects
 %
 % cas :   a cell array of gds_structure objects
-% bcell : if == 1, a cell array is returned, even when only
-%         one top level structure is found.
-% ts :    name of the top structure or cell array with names if 
-%         the library has more than one top level structure
+% bcell : if == 1, always return a cell array, even when only
+%         one top level structure is found. Default is 0.
+% ts :    a string with the name of the top structure or cell 
+%         array with names if the library has more than one top 
+%         level structure
 
 % Initial version, Ulf Griesmann, December 2012
 

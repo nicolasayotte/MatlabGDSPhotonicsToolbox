@@ -30,7 +30,7 @@ function [cd] = gdsii_cdfeature(layer, mincd, uunit);
 % set default arguments
 if nargin < 3 
    uunit = 1e-6; 
-   fprintf('\n>>> Warning :  uunit set to 1e-6 m for CD feature.<<<\n\n');
+   fprintf('\n>>> Warning :  uunit assumed to be 1e-6 m (1 um) for CD feature.<<<\n\n');
 end
 if nargin < 2, mincd = 0; end
 if nargin < 1, layer = 1; end

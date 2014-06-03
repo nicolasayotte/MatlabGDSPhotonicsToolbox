@@ -14,10 +14,10 @@
 //       of a hole.
 //
 // polygon operations are:
-//   'and' :  polygon intersection
-//   'or' :   polygon union
-//   'notb' : polygon difference
-//   'xor' :  polygon union minus polygon difference
+//   'and' :             polygon intersection
+//   'or' :              polygon union
+//   'notb' or 'diff' :  polygon difference
+//   'xor' :             polygon union minus polygon difference
 //
 // Ulf Griesmann, NIST, November 2012
 
@@ -92,6 +92,8 @@ mexFunction(int nlhs, mxArray *plhs[],
    else if ( !strncmp(ostr, "and", 3) )
       pop = ctIntersection; 
    else if ( !strncmp(ostr, "notb", 4) )
+      pop = ctDifference; 
+   else if ( !strncmp(ostr, "diff", 4) )
       pop = ctDifference; 
    else if ( !strncmp(ostr, "xor", 3) )
       pop = ctXor; 

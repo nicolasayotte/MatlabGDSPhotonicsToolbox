@@ -2,7 +2,7 @@ function glib = subsasgn(glib, ins, val);
 %function glib = subsasgn(glib, ins, val);
 %
 % Subscript assign method for the gds_library class
-% Enables addressing structure in a library using
+% Enables addressing structures in a library using
 % either array indexing or structure name indexing
 %
 % glib :  gds_library object to be modified
@@ -17,10 +17,8 @@ switch ins.type
     idx = ins.subs{:};
     if isa(val, 'gds_structure')
        glib.st{idx} = val;
-       glib.numst = glib.numst + 1;
     elseif iscell(val)
        glib.st(idx) = val;
-       glib.numst = glib.numst + length(val);
     else
        error('gds_library.subsasgn :  rhs. must be gds_structure or cell array.');
     end

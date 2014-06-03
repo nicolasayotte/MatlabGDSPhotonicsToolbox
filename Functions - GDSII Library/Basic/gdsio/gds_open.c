@@ -23,6 +23,7 @@
  */
 
 #include <stdio.h>
+#include <stdint.h>
 #include "gdsio.h"
 #include "mex.h"
 
@@ -39,7 +40,7 @@ mexFunction(int nlhs, mxArray *plhs[],
    FILE *fob;                  /* file object pointer */
    FILE **pfob;                /* pointer to fob */
    double *pd;
-   long int fsize;
+   gdsint fsize;
    char fname[FNAME_LEN];      /* file name */
    char mode[MODE_LEN];        /* string with polygon operation */
 
@@ -101,7 +102,7 @@ mexFunction(int nlhs, mxArray *plhs[],
 	 mexErrMsgTxt("fseek to beginning of file failed.");
       plhs[1] = mxCreateDoubleMatrix(1,1, mxREAL);
       pd = mxGetData(plhs[1]);
-      *pd = fsize;
+      *pd = (double)fsize;
    }
 }
 

@@ -1,5 +1,5 @@
-function [A,N] = adjmatrix(S);
-%function [A,N] = adjmatrix(S);
+function [A,N] = adjmatrix(S)
+%function [A,N] = adjmatrix(S)
 %
 % return the adjacency matrix and a list of structure
 % names for a cell array S of gds_structure objects 
@@ -21,20 +21,20 @@ function [A,N] = adjmatrix(S);
 % Initial version, Ulf Griesmann, December 2011
 % converted to sparse matrix, Ulf Griesmann, November 2012
 
-% find all structure names
-N = cellfun(@sname, S, 'UniformOutput',0);
+   % find all structure names
+   N = cellfun(@sname, S, 'UniformOutput',0);
 
-% compute the adjacency matrix
-A = sparse(length(N),length(N));
+   % compute the adjacency matrix
+   A = sparse(length(N),length(N));
 
-for k = 1:length(N) % loop over structures
+   for k = 1:length(N) % loop over structures
   
-   % find names of all referenced structures in the k-th structure
-   R = find_ref(S{k});
+      % find names of all referenced structures in the k-th structure
+      R = find_ref(S{k});
    
-   % look up indices of all reference names in name list N
-   A(k,:) = ismember(N,R);
+      % look up indices of all reference names in name list N
+      A(k,:) = ismember(N,R);
    
+    end
+    
 end
-
-return

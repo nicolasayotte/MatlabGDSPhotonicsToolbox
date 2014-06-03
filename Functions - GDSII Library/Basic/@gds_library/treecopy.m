@@ -31,10 +31,6 @@ struc = glib.st(unique(subtree_ind));
    function find_children(A, pai);
       %
       % Recursively find all children of node si.
-      % The resulting set of indices is returned through
-      % a global variable because I couldn't figure out 
-      % how to initialize the return value of a recursive
-      % function.
       %
       for p = pai
   

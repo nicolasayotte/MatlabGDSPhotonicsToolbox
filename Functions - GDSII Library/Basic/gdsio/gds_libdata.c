@@ -28,7 +28,7 @@
 #include "mexfuncs.h"
 
 #define NLEN   256
-#define TLEN   46
+#define TLEN   64
 
 
 /*-----------------------------------------------------------------*/
@@ -59,8 +59,11 @@ mexFunction(int nlhs, mxArray *plhs[],
    /* get file handle argument */
    fob = get_file_ptr((mxArray *)prhs[0]);
 
-   /* create structure for output */
-   plhs[0] = mxCreateStructMatrix(1, 1, 9, fields); 
+   /* create structure for output and initialize */
+   plhs[0] = mxCreateStructMatrix(1, 1, 9, fields);
+   for (k=0; k<9; k++) {
+      mxSetFieldByNumber(plhs[0], 0, k, empty_matrix());
+   }
 
    /* HEADER record, library version */
    if ( read_record_hdr(fob, &rtype, &rlen) ) {

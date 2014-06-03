@@ -9,6 +9,6 @@ function [ne] = numel(gstruc);
 
 % Ulf Griesmann, NIST, June 2011
 
-ne = gstruc.numel;
+   ne = numel(gstruc.el);
 
-return
+end

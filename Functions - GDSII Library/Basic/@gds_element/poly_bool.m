@@ -45,9 +45,8 @@ function [bo] = poly_bool(ba, bb, op, varargin);
 % function currently exits with an error when the output polygons are
 % not all simple.
 %
-% 2) This function can use either the polygon clipper library by 
-% Angus Johnson (www.angusj.com), or the General Polygon 
-% Clipper library by Alan Murta (www.cs.man.ac.uk/~toby/gpc/).
+% 2) This function is based on the Clipper library by 
+% Angus Johnson (www.angusj.com).
 
 % Initial version, Ulf Griesman, August 2012
 
@@ -68,17 +67,17 @@ end
 % units must be defined
 if isempty(gdsii_uunit) 
    fprintf('%s', '\n  +-------------------- WARNING -----------------------+\n');
-   fprintf('%s', '  | Units are not defined; setting uunit/dbunit = 1.   |\n'); 
+   fprintf('%s', '  | Units are not defined; setting uunit/dbunit = 1000.|\n'); 
    fprintf('%s', '  | Define units by creating the library object or     |\n'); 
    fprintf('%s', '  | by calling gdsii_units.                            |\n'); 
    fprintf('%s', '  +----------------------------------------------------+\n\n');
-   duf = 1;
+   udf = 1000;
 else
-   duf = gdsii_uunit;      % conversion factor to db units
+   udf = gdsii_uunit;      % conversion factor to db units
 end
 
 % apply boolean set operation
-[xyo, hf] = poly_boolmex(ba.data.xy, bb.data.xy, op, duf);
+[xyo, hf] = poly_boolmex(ba.data.xy, bb.data.xy, op, udf);
 if any(hf)
    error('gds_element.poly_bool :  a polygon with a hole was created.');
 end

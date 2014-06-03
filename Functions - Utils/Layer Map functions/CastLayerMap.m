@@ -29,10 +29,8 @@ inlib = read_gds_library(filename);
 libname = lname(inlib);
 if(strcmpi(mapType, 'output'))
    author = libname(1 : find(libname == '_', 1, 'first') - 1);
-   projectName = find(filename == '_');
-   projectName = filename(projectName(2) + 1 : end);
    outlibname = [author '_' mapName '.DB'];
-   outfile = [author '_' mapName '_' projectName];
+   outfile = [filename(1:end-4) '_' mapName '.gds'];
 elseif(strcmpi(mapType, 'input'))
    outlibname = libname;
    outfile = [filename(1 : end - 4) '_ulaval.gds'];

@@ -10,6 +10,6 @@ function nums = numst(glib);
 
 % Ulf Griesmann, NIST, June 2011
 
-nums = glib.numst;
+nums = numel(glib.st);
 
 return

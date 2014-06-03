@@ -22,7 +22,7 @@ get_field_ptr(mxArray *structure, char *fieldname, mxArray **pfieldp)
 {
    mxArray *field;
 
-   field = mxGetField(structure, 0, fieldname);
+   field = mxGetField(structure, (mwIndex)0, fieldname);
    *pfieldp = field;
 
    if (field == NULL)
@@ -69,7 +69,7 @@ struct_set_word(mxArray *saptr, int fieldnum, uint16_t *word, int n)
    dptr  = mxGetData(mptr);
    for (k=0; k<n; k++)
       dptr[k] = (double)word[k];
-   mxSetFieldByNumber(saptr, 0, fieldnum, mptr);
+   mxSetFieldByNumber(saptr, (mwIndex)0, fieldnum, mptr);
 }
 
 
@@ -84,7 +84,7 @@ struct_set_word(mxArray *saptr, int fieldnum, uint16_t *word, int n)
 void
 struct_set_string(mxArray *saptr, int fieldnum, char *str)
 {
-   mxSetFieldByNumber(saptr, 0, fieldnum, mxCreateString(str));
+   mxSetFieldByNumber(saptr, (mwIndex)0, fieldnum, mxCreateString(str));
 }
 
 
@@ -105,7 +105,7 @@ struct_set_float(mxArray *saptr, int fieldnum, double fnum)
    mptr = mxCreateDoubleMatrix(1, 1, mxREAL);
    dptr  = mxGetData(mptr);
    *dptr = fnum;
-   mxSetFieldByNumber(saptr, 0, fieldnum, mptr);
+   mxSetFieldByNumber(saptr, (mwIndex)0, fieldnum, mptr);
 }
 
 
@@ -123,7 +123,7 @@ struct_set_bool(mxArray *saptr, int fieldnum, int lval)
       mptr = mxCreateLogicalScalar(1);
    else
       mptr = mxCreateLogicalScalar(0);      
-   mxSetFieldByNumber(saptr, 0, fieldnum, mptr);
+   mxSetFieldByNumber(saptr, (mwIndex)0, fieldnum, mptr);
 }
 
 

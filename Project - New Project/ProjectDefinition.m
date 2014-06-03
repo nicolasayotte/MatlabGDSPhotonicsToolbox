@@ -10,7 +10,7 @@ cad = struct('author', 'Nick', ...       % project lead author or company
   'process', 'processName', ...          % fabrication process
   'run', 'runName', ...                  % run name
   'name', 'projectName', ...             % project name
-  'layermap', 'general', ...             % layer map name
+  'layermap', 'TEST_fab', ...            % layer map name
   'uunit', 1e-6, ...                     % CAD scale (1e-6 - > microns)
   'dbunit', 1e-11, ...                   % CAD database unit (1e-11 - > nm)
   'size', [10000, 2000], ...             % Floorplan dimensions

@@ -1,3 +1,44 @@
+2014-May-28, Ulf Griesmann
+- version 116g
+- clarified the Licenses for all files in the toolbox
+  in file README.
+
+2014-May-18, Ulf Griesmann
+- version 116f
+- eliminated field 'numel' from gds_structure objects and
+  field 'numst' from gds_library objects. Not needed because
+  cell arrays "know" how many elements they have. Saves a bit
+  of space.
+
+2014-May-17, Ulf Griesmann
+- version 116d, 116e
+- more improvements to '@gds_structure/add_ref.m'
+- slightly faster and cleaner '@gds_structure/find_ref.m'
+
+2014-May-15, Ulf Griesmann
+- version 116c
+- when a cell array of elements is passed to '@gds_structure/add_ref.m', 
+  the function checks if all objects in the cell array are gds_elements.
+  This missing check has resulted in bugs that were difficult to debug.
+
+2014-April-17, Ulf Griesmann
+- version 116b
+- try to fix more problems that could be the cause
+  for the problems on MATLAB for Win64
+
+2014-April-15, Ulf Griesmann
+- version 116a
+- fixed bug in argument checking of '@gds_element/plus.m'.
+- overloaded operators & | - ^ for Boolean set operations on 
+  boundary elements.
+- many fixes in help texts.
+
+2014-April-12, Ulf Griesmann
+- version 115a
+- 'read_gds_library' crashed on Windows/64 with both Octave
+  and MATLAB, because 'long int' is only 32 bits wide in 64
+  bit Windows. This caused a bug in 'gds_ftell.c' and 'gds_open.c'.
+
 2014-March-26, Ulf Griesmann
 - version 114a
 - removed the General Polygon Clipper library. Boolean operations are
@@ -9,7 +50,7 @@
   operations.
 
 2014-January-15, Ulf Griesmann
-- versin 112a
+- version 112a
 - eliminate global variable in '@gds_library/treecopy.m' and
   '@gds_library/subtree.m' and use nested functions instead.
   Requires Octave 3.8. Should be a bit faster.

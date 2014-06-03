@@ -18,7 +18,6 @@ if ~ischar(sname), error('gds_structure :  first argument is not a string'); end
 
 % default values; the structure is implemented as a cell array
 gstruc.sname = sname; % structure name
-gstruc.numel = 0;     % number of elements
 gstruc.el = {};       % cell array of elements
 
 % structure dates
@@ -34,11 +33,12 @@ while length(varargin) > 0
    
    if isa(el, 'gds_element')  % check if an element
       gstruc.el{end+1} = el;
-      gstruc.numel = gstruc.numel + 1;
       
    elseif iscell(el)          % check if it is a cell array
+      if ~all(cellfun(@(x)isa(x,'gds_element'), el))
+         error('gds_structure : at least one object in cell array is not a gds_element.');
+      end
       gstruc.el = [gstruc.el, el];
-      gstruc.numel = gstruc.numel + length(el);
       
    else
       error('gds_structure :  argument(s) must be GDS element(s) or structure(s).');

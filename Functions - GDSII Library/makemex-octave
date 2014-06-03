@@ -3,7 +3,8 @@
 # shell script to compile .mex functions in Linux/Unix
 #
 
-export CFLAGS='-O3 -march=native -fomit-frame-pointer'
+# the following flags are for gcc
+export CFLAGS='-O3 -fomit-frame-pointer -march=native -mtune=native'
 
 cd Basic/gdsio
 mkoctfile --mex -s gds_open.c mexfuncs.c
@@ -40,5 +41,3 @@ mkoctfile --mex -s poly_boolmex.cpp clipper.cpp
 rm *.o
 
 cd ..
-
-

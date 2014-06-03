@@ -22,4 +22,4 @@ log.write('\tTop Cell name: %s\n ', cellname);
 
 
 topcell = gds_structure(cellname);            % Top cell structure
-layerMap = ReadLayerMap(cad.layermap, log);   % Layer map load (fabname)
+layerMap = ReadLayerMap('general', log);     % Layer map load (fabname)
