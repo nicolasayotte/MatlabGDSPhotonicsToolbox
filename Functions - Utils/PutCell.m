@@ -33,9 +33,6 @@ putCell = struct('anchor', 'floorplan', 'verticalAlign', 'topOutside', 'horizont
    'anchorHorizontal', [], 'anchorVertical', []);
 putCell = ReadOptions(putCell, varargin{:});
 
-makename = @(x) [cad.author '_' x '_' cad.v];
-cellname = makename(cellname);
-
 
 %% Determine required translation
 anchorType = {'Horizontal', 'Vertical'};
@@ -66,7 +63,9 @@ for anchorNum = 1 : 2
          
          % Place cell relative to another cell
          if(anchorNum == 1); cellRect = StransXY(cellInfo.(cellname).floorplan.rect, [0, 0], putCell.strans); end
-         refrect = StransXY(cellInfo.(makename(putCell.(anchor))).floorplan.rect, cellInfo.(makename(putCell.(anchor))).spos(putCell.anchorIndex, :), cellInfo.(makename(putCell.(anchor))).strans(putCell.anchorIndex));
+         refrect = StransXY(cellInfo.(putCell.(anchor)).floorplan.rect, ...
+            cellInfo.(putCell.(anchor)).spos(putCell.anchorIndex, :),...
+            cellInfo.(putCell.(anchor)).strans(putCell.anchorIndex));
          [cellRect, t] = Positioning(cellRect, refrect, putCell, anchorType{anchorNum});
          translation = translation + t;
    end
@@ -101,9 +100,10 @@ else
    infoIn = [];
    infoOut = [];
 end
+fullcellname = [cad.author '_' cellname '_' cad.v];
+filename = ['Cells/' cad.author '_' cellname '_' cad.v];
 
-filename = ['Cells/' cellname '.gds'];
-save(['Cells/' cellname '_put'], 'filename', 'cellname', 'spos', 'strans');
+save(['Cells/' fullcellname '_put'], 'filename', 'cellname', 'spos', 'strans');
 
 
 cellInfo.(cellname).spos = spos;
@@ -115,7 +115,7 @@ if(exist('cellRect', 'var'))
    topcell = add_element(topcell, limitElement);
    varargout{1} = cellRect;
    
-   strEl = gds_element('text', 'text', cellname, 'xy', mean(cellRect), 'layer', layerMap.TXT(1), 'verj', 1, 'horj', 1);
+   strEl = gds_element('text', 'text', fullcellname, 'xy', mean(cellRect), 'layer', layerMap.TXT(1), 'verj', 1, 'horj', 1);
    topcell = add_element(topcell, strEl);
    
    if(~isempty(infoIn))

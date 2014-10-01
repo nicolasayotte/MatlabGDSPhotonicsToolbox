@@ -19,7 +19,7 @@ rows = max([size(period, 1), size(corw, 1), size(dc, 1), size(w, 1), size(pillar
 obragg(rows, 1) = struct('xy', [], 'layer', [], 'dtype', [], 'pos', [], 'ori', 0, 'len', [], ...
   'spatialVector', [], 'spatialPhase', [], 'apodization', [], 'period', 0, 'corw', [],...
   'dc', 0.5, 'w', [], 'pillarSpacing', 0, 'order', 0, 'apodizationType', 'phase', 'apodizationFrequency', 0.4, ...
-  'widthIsAverage', true);
+  'widthIsAverage', true,'switchsides',false);
 
 
 for row = 1 : rows
@@ -46,6 +46,10 @@ for row = 1 : rows
   obragg(row).dc = dc(row);
   obragg(row).pillarSpacing = pillarSpacing(row);
   obragg(row) = ReadOptions(obragg(row), varargin{:});
+  
+  if obragg(row).switchsides == true      
+      obragg(row).pillarSpacing = obragg(row).pillarSpacing - obragg(row).w(1) - obragg(row).corw(1);
+  end
   
   periodNum = round(len/period(row) + 4e3);
   spatialVectorHi = linspace( - len/2, len/2, 2e5);

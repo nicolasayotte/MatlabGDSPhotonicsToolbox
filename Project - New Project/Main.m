@@ -8,17 +8,18 @@ clear all; close all; clear classes; clc; format long; format compact;
 
 
 %% Make all
-CellA_StraightWG;
-CellB_Microrings;
-CellC_CompactIBGs;
-CellD_RidgeIBGs;
-CellE_CustomIBGs;
-CellF_RoutingWG;
 
+Cell_A_StraightWG;
+Cell_B_Microrings;
+Cell_C_CompactIBGs;
+Cell_D_RidgeIBGs;
+Cell_E_CustomIBGs;
+Cell_F_MZI
+Cell_RoutingWG;
 
 %% Merge the cells into a master GDS
 MergeCells;
 
 
 %% Cast the ulaval map to a different layer map
-ExportMap;
+% ExportMap;

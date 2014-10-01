@@ -5,7 +5,7 @@ function cad = ProjectDefinition(log)
 
 
 %% Project information
-cad = struct('author', 'Nick', ...       % project lead author or company
+cad = struct('author', 'Author', ...       % project lead author or company
   'fab', 'fabName', ...                  % fabrication facility
   'process', 'processName', ...          % fabrication process
   'run', 'runName', ...                  % run name

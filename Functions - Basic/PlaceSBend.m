@@ -1,15 +1,15 @@
 function [structure, info, infoInput] = PlaceSBend(structure, info, len, h, r, wid, layer, datatype, varargin)
 %PlaceSBend places s-bend polygons in a gds structure
 %Author : Nicolas Ayotte                                       Creation date : 2/2/2014
-% 
+%
 %     This function receives an input GDS structure and the parameters for one or
 %     many s-bends to create and place at positions and orientations determined by
 %     the info variable. It then updates info to the output positions.
-% 
+%
 %     [struct, info, infoInput] = PlaceSBend(struct, info, len, h, r, wid, layer, info)
 %     [struct, info] = PlaceSBend(struct, info, len, h, r, wid, layer, info, 'group', true)
-% 
-% 
+%
+%
 %     ARGUMENT NAME     SIZE        DESCRIPTION
 %     structure         1           gds_structure library object
 %     r                 1           bend radius
@@ -32,7 +32,7 @@ function [structure, info, infoInput] = PlaceSBend(structure, info, len, h, r, w
 %     'type'            string      'normal' all layers turn smoothly
 %                                   ['cladding'] even layer indices turn in straight segments
 %                                   'metal' all layers turn in straight segments
-% 
+%
 %     See also PlaceRect, PlaceArc, PlaceTaper
 
 rows = size(info.pos, 1);
@@ -44,6 +44,8 @@ sbend.group = false;
 sbend.distance = [];
 sbend.align = 'center';
 sbend.type = 'cladding';
+sbend.minimumLength = false;
+sbend.backgroundRect = false;
 sbend = ReadOptions(sbend, varargin{ : });
 
 
@@ -51,20 +53,30 @@ sbend = ReadOptions(sbend, varargin{ : });
 NonNegative(len, wid);
 [len, wid, layer, datatype, info.ori] = NumberOfRows(rows, len, wid, layer, datatype, info.ori);
 if(sbend.group && (rows > 1) && ~isempty(sbend.distance))
-  sbend.distance = NumberOfColumns(rows - 1, sbend.distance);
+   sbend.distance = NumberOfColumns(rows - 1, sbend.distance);
 end
 wid = NumberOfColumns(cols, wid);
 infoInput = InvertInfo(info);
 
 if(sbend.group && rows > 1)
-    info = CheckParallelAndNormal(info);
+   [info, ~, spacing] = CheckParallelAndNormal(info);
 end
 
 
 %% Group Routing
 [verticalOffsets, lengthInput, lengthOutput] = CalculateOffsets(sbend, h, r, rows, info);
-[lengthCenter, arcAngle] = CalculateAngleAndLength(len, r, rows, lengthInput, lengthOutput, verticalOffsets);
 
+if sbend.minimumLength
+   if(sbend.group && (rows > 1))
+      tm = abs(verticalOffsets) > 1e-8;
+      len(tm) = lengthInput(tm) + lengthOutput(tm) + 2.01 * r;
+      len(~tm) = max(len(tm));
+   else
+      len(:) = 2.01 * r;
+   end
+end
+
+[lengthCenter, arcAngle] = CalculateAngleAndLength(len, r, rows, lengthInput, lengthOutput, verticalOffsets);
 
 %% S-bend
 [structure, info] = PlaceRect(structure, info, lengthInput, wid, layer, datatype);
@@ -73,6 +85,21 @@ end
 [structure, info] = PlaceArc(structure, info, -arcAngle, r, wid, layer, datatype, 'type', sbend.type);
 [structure, info] = PlaceRect(structure, info, lengthOutput, wid, layer, datatype);
 
+%% Background Rect
+if(sbend.backgroundRect && sbend.group && strcmp(sbend.type, 'cladding'))
+   infoInv = InvertInfo(info);
+   infoBG = SplitInfo(infoInput, 1);
+   
+   normalVector = [cosd(infoInv.ori(1) + 90), sind(infoInv.ori(1) + 90)];
+   parVector = [cosd(infoInput.ori(1)), sind(infoInput.ori(1))];
+   
+   normalPositions = sum([infoInv.pos; infoInput.pos] .* repmat(normalVector, size(infoInput.pos, 1) * 2, 1), 2);
+   
+   widBG = max(normalPositions) - min(normalPositions) + max(wid(1, :));
+   posBG = (max(normalPositions) + min(normalPositions))/2;
+   infoBG.pos = normalVector * posBG + sum(infoInv.pos(1,:) .* parVector) .* parVector;
+   [structure] = PlaceRect(structure, infoBG, len(1), widBG, layer(1,2:2:end), datatype(1,2:2:end));
+end
 return
 
 
@@ -80,48 +107,48 @@ return
 function [verticalOffsets, lengthInput, lengthOutput] = CalculateOffsets(sbend, meanVerticalOffset, r, rows, info)
 
 if((rows > 1) && sbend.group)    % Group S-Bend
-  relNormalSpacing = diff(info.pos, 1);
-  absNormalSpacing = [0, 0; cumsum(relNormalSpacing, 1)];
-  initialDistance = sqrt(sum(absNormalSpacing .* absNormalSpacing, 2));
-  initialDistance = initialDistance - min(initialDistance);
-  
-  if(~isempty(sbend.distance))
-    finalDistance = [0, cumsum(sbend.distance)]';
-  else
-    finalDistance = initialDistance;
-  end
-  
-  distanceChange = finalDistance - initialDistance;
-  switch sbend.align
-    case 'bottom'
-      align = 0;
-    case 'top'
-      align = distanceChange(end);
-    otherwise
-      align = distanceChange(end)/2;
-  end
-  verticalOffsets = meanVerticalOffset + distanceChange - align;
-
-  lengthInput = zeros(rows, 1);
-  lengthOutput = lengthInput;
-  for row = 1 : rows
-    if(abs(verticalOffsets(row)) < 1e-8)
-      lengthInput(row) = 0;
-      lengthOutput(row) = 0;
-    elseif(verticalOffsets(row) < 0)
-      lengthInput(row) = (row - 1) * r;
-      lengthOutput(row) = (rows - row) * r ;
-    else
-      lengthInput(row) = (rows - row) * r ;
-      lengthOutput(row) = (row - 1) * r ;
-    end
-  end
-  lengthInput = lengthInput - min(lengthInput);
-  lengthOutput = lengthOutput - min(lengthOutput);
+   relNormalSpacing = diff(info.pos, 1);
+   absNormalSpacing = [0, 0; cumsum(relNormalSpacing, 1)];
+   initialDistance = sqrt(sum(absNormalSpacing .* absNormalSpacing, 2));
+   initialDistance = initialDistance - min(initialDistance);
+   
+   if(~isempty(sbend.distance))
+      finalDistance = [0, cumsum(sbend.distance)]';
+   else
+      finalDistance = initialDistance;
+   end
+   
+   distanceChange = finalDistance - initialDistance;
+   switch sbend.align
+      case 'bottom'
+         align = 0;
+      case 'top'
+         align = distanceChange(end);
+      otherwise
+         align = distanceChange(end)/2;
+   end
+   verticalOffsets = meanVerticalOffset + distanceChange - align;
+   
+   lengthInput = zeros(rows, 1);
+   lengthOutput = lengthInput;
+   for row = 1 : rows
+      if(abs(verticalOffsets(row)) < 1e-8)
+         lengthInput(row) = 0;
+         lengthOutput(row) = 0;
+      elseif(verticalOffsets(row) < 0)
+         lengthInput(row) = (row - 1) * r;
+         lengthOutput(row) = (rows - row) * r ;
+      else
+         lengthInput(row) = (rows - row) * r ;
+         lengthOutput(row) = (row - 1) * r ;
+      end
+   end
+   lengthInput = lengthInput - min(lengthInput);
+   lengthOutput = lengthOutput - min(lengthOutput);
 else                      % Individual S-Bends
-  lengthInput = zeros(rows, 1);
-  lengthOutput = lengthInput;
-  verticalOffsets = meanVerticalOffset;
+   lengthInput = zeros(rows, 1);
+   lengthOutput = lengthInput;
+   verticalOffsets = meanVerticalOffset;
 end
 
 return
@@ -132,23 +159,24 @@ function [lengthCenter, arcAngle] = CalculateAngleAndLength(len, r, rows, length
 
 lengthCenter = len - (lengthInput + lengthOutput);
 
-if(any(lengthCenter < 0))
-  error('Your s-bend length is too short.');
-end
+% if(any(lengthCenter < 0))
+%    error('Your s-bend length is too short.');
+% end
 
 arcAngle = zeros(rows, 1);
 for row = 1 : rows
-  guideVerticalOffset = abs(verticalOffsets(row));
-  if(guideVerticalOffset > 1e-3)
-    guideLength = lengthCenter(row);
-    fun = @(x) (guideVerticalOffset - 2 * r * (1 - cos(x))) .* cot(x) + 2 * r * sin(x) - guideLength;
-    arcAngle(row, 1) = NaN;
-    range = 0.5;
-    while(isnan(arcAngle(row, 1)))
-      arcAngle(row, 1) = funSolve(fun, 0, range * pi);   % Transcendant equation numerical solution
-      range = range / 100;
-    end
-  end
+   guideVerticalOffset = abs(verticalOffsets(row));
+   if(guideVerticalOffset > 1e-3)
+      guideLength = lengthCenter(row);
+      fun = @(x) (guideVerticalOffset - 2 * r * (1 - cos(x))) .* cot(x) + 2 * r * sin(x) - guideLength;
+      arcAngle(row, 1) = NaN;
+      range = 0.5;
+      for ii = 1 : 6
+         arcAngle(row, 1) = funSolve(fun, 0, range * pi);   % Transcendant equation numerical solution
+         if (~isnan(arcAngle(row, 1))); break; end
+         range = range / 100;         
+      end
+   end
 end
 
 nonNull = arcAngle~= 0;

@@ -1,4 +1,4 @@
-function outrefs = GetRefsFloorplan(refs)
+function refs = GetRefsFloorplan(refs)
 %GETREFSFLOORPLAN Look into the .mat files associated to the library .gds files to
 % gather the referenced cells floorplan information.
 %
@@ -15,13 +15,10 @@ function outrefs = GetRefsFloorplan(refs)
 %
 %     See also CREATEREFSFLOORPLAN, GETSTRUCTURESIZE
 
-outrefs(1:length(refs)) = struct('filename', '', 'cellname', '', 'floorplan', []);
 
 for ref = 1 : length(refs)
-  outrefs(ref).filename = refs(ref).filename;
-  outrefs(ref).cellname = refs(ref).cellname;
   load(refs(ref).filename(1:end-4));
-  outrefs(ref).floorplan = cells.(refs(ref).cellname).floorplan;
+  refs(ref).floorplan = cells.(refs(ref).cellname).floorplan;
 end
 
 end

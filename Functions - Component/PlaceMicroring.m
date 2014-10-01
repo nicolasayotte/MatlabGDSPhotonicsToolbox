@@ -45,9 +45,9 @@ for row = 1 : rows
   
   % Microring or microdisk
   [structure, rowInfoRing] = PlaceRect(structure, rowInfoRing, ring(row).straightLength, ring(row).w, ring(row).layer, ring(row).dtype);
-  [structure, rowInfoRing] = PlaceArc(structure, rowInfoRing, 180, ring(row).radius(1), ring(row).w, ring(row).layer, ring(row).dtype, 'type', 'normal');
+  [structure, rowInfoRing] = PlaceArc(structure, rowInfoRing, 180, ring(row).radius(1), ring(row).w, ring(row).layer, ring(row).dtype,  'type', 'cladding');
   [structure, rowInfoRing] = PlaceRect(structure, rowInfoRing, ring(row).straightLength, ring(row).w, ring(row).layer, ring(row).dtype);
-  [structure] = PlaceArc(structure, rowInfoRing, 180, ring(row).radius(1), ring(row).w, ring(row).layer, ring(row).dtype, 'type', 'normal');
+  [structure] = PlaceArc(structure, rowInfoRing, 180, ring(row).radius(1), ring(row).w, ring(row).layer, ring(row).dtype,  'type', 'cladding');
 
   % Output straight segment
   [structure, rowInfoCross, tinfoContra] = PlaceRect(structure, rowInfoCross, ring(row).straightLength, wid(row,:), layer(row,:), dtype(row,:));

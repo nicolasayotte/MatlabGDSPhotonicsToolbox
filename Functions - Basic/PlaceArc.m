@@ -42,7 +42,7 @@ cols = size(layer, 2);
 arc.group = false;
 arc.distance = [];
 arc.type = 'cladding';
-arc.resolution = 50e-3;
+arc.resolution = 30e-3;
 arc = ReadOptions(arc, varargin{ : });
 
 

@@ -8,5 +8,6 @@ function cellInfo = GetCellInfo(cad)
 files = dir(['Cells/*' cad.v '.mat']);
 for file = 1 : length(files)
   filename = files(file).name(1:end-4);
-  cellInfo.(filename) = load(filename);  % Load all files data
+  ind = find(filename == '_');
+  cellInfo.(filename((ind(1)+1):(ind(end) - 1))) = load(filename);  % Load all files data
 end

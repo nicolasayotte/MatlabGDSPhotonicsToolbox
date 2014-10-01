@@ -15,7 +15,7 @@ rows = max([size(gap, 1), size(layer, 1), size(dtype, 1)]);
 
 
 oring(rows, 1) = struct('radius', [], 'w', [], 'radiusmin', [], 'radiusmax', [], 'gap', [], 'layer', [], 'dtype', [], ...
-  'position', 'over', 'resolution', 100e-3, 'straightLength', 0);
+  'position', 'over', 'resolution',  50e-3, 'straightLength', 0);
 
 
 for row = 1 : rows

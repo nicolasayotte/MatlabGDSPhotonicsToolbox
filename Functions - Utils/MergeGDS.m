@@ -19,7 +19,7 @@ files = dir(['Cells/*' cad.v '_put.mat']);
 
 for inputFile = 1 : length(files)
   putData = load(files(inputFile).name(1:end-4));
-  
+  cellname = [cad.author '_' putData.cellname '_' cad.v];
   inputLibrary = read_gds_library(putData.filename);
   log.write('\t\tRead gds: %s\n', putData.filename);
   
@@ -45,8 +45,8 @@ for inputFile = 1 : length(files)
   
   for place = 1 : size(putData.spos, 1)
     % Add the input cell in the merged library top cell
-    log.write('\t\t\t\tPlacing topcell %s at [%1.3f, %1.3f]\n', putData.cellname, putData.spos(place, :));
-    topCell = add_ref(topCell, putData.cellname, 'xy', putData.spos(place, :), 'strans', putData.strans(place));
+    log.write('\t\t\t\tPlacing topcell %s at [%1.3f, %1.3f]\n', cellname, putData.spos(place, :));
+    topCell = add_ref(topCell, cellname, 'xy', putData.spos(place, :), 'strans', putData.strans(place));
     if(putData.strans(place).reflect); log.write('\t\t\t\t\tReflection: %u\n', putData.strans(place).reflect); end
     if(putData.strans(place).angle); log.write('\t\t\t\t\tRotation: %01.0f degress\n', putData.strans(place).angle); end
   end

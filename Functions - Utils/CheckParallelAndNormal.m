@@ -1,4 +1,4 @@
-function [infoSorted, maskOriginalOrder] = CheckParallelAndNormal(info)
+function [infoSorted, maskOriginalOrder, spacing] = CheckParallelAndNormal(info)
 %CHECKPARALLELANDNORMAL Return an info structure with the positions sorted according
 % to inscreasing distance in the normal direction to their orientation IF the
 % vectors are parallel and aligned. If they are not it throws an error.
@@ -23,4 +23,11 @@ normalVector = [cosd(info.ori + 90), sind(info.ori + 90)];
 infoSorted = SplitInfo(info, maskOrdered);
 
 maskOriginalOrder = arrayfun(@(x)find(maskOrdered == x), 1:rows)';
+
+if(nargout > 2)
+   vectorFromPrevious = diff(infoSorted.pos, 1);
+   vectorFromFirst = [0,0; cumsum(vectorFromPrevious, 1)];
+   spacing = sqrt(vectorFromFirst(:,1).^2 + vectorFromFirst(:,2).^2);
+end
+
 end

@@ -45,6 +45,9 @@ infoOut = MergeInfo(infoOut, InvertInfo(infoIn));
 infoIn = [];
 infoOut = [];
 
+% Line of code to add text in the gds
+strel = gdsii_ptext('String test', [4000,50], 100, layerMap.FullCore, 0);
+topcell = add_element(topcell, strel);
 
 %% Save GDS and .mat cell information
 FinalizeCell(cad, cellname, topcell, refs, infoIn, infoOut, log);
