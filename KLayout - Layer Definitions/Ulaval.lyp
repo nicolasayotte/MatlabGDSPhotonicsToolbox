@@ -323,11 +323,11 @@
 		<source>14/1@1</source>
 	</properties>
 	<properties>
-		<frame-color>#7F7F7F</frame-color>
-		<fill-color>#7F7F7F</fill-color>
+		<frame-color>#FF9900</frame-color>
+		<fill-color>#FF9900</fill-color>
 		<frame-brightness>0</frame-brightness>
 		<fill-brightness>0</fill-brightness>
-		<dither-pattern>I3</dither-pattern>
+		<dither-pattern>I2</dither-pattern>
 		<visible>true</visible>
 		<transparent>true</transparent>
 		<width>1</width>
@@ -337,11 +337,11 @@
 		<source>21/1@1</source>
 	</properties>
 	<properties>
-		<frame-color>#4C4C4C</frame-color>
-		<fill-color>#4C4C4C</fill-color>
+		<frame-color>#CC00CC</frame-color>
+		<fill-color>#CC00CC</fill-color>
 		<frame-brightness>0</frame-brightness>
 		<fill-brightness>0</fill-brightness>
-		<dither-pattern>I3</dither-pattern>
+		<dither-pattern>I2</dither-pattern>
 		<visible>true</visible>
 		<transparent>true</transparent>
 		<width>1</width>
@@ -393,8 +393,8 @@
 		<source>21/5@1</source>
 	</properties>
 	<properties>
-		<frame-color>#7F7F7F</frame-color>
-		<fill-color>#7F7F7F</fill-color>
+		<frame-color>#FF9900</frame-color>
+		<fill-color>#FF9900</fill-color>
 		<frame-brightness>0</frame-brightness>
 		<fill-brightness>0</fill-brightness>
 		<dither-pattern>I13</dither-pattern>
@@ -407,8 +407,8 @@
 		<source>22/1@1</source>
 	</properties>
 	<properties>
-		<frame-color>#4C4C4C</frame-color>
-		<fill-color>#4C4C4C</fill-color>
+		<frame-color>#CC00CC</frame-color>
+		<fill-color>#CC00CC</fill-color>
 		<frame-brightness>0</frame-brightness>
 		<fill-brightness>0</fill-brightness>
 		<dither-pattern>I13</dither-pattern>
@@ -659,6 +659,20 @@
 		<source>93/0@1</source>
 	</properties>
 	<properties>
+		<frame-color>#00FFFF</frame-color>
+		<fill-color>#00FFFF</fill-color>
+		<frame-brightness>0</frame-brightness>
+		<fill-brightness>0</fill-brightness>
+		<dither-pattern>I3</dither-pattern>
+		<visible>true</visible>
+		<transparent>true</transparent>
+		<width>3</width>
+		<marked>false</marked>
+		<animation>0</animation>
+		<name>94/0 SEM</name>
+		<source>94/0@1</source>
+	</properties>
+	<properties>
 		<frame-color>#CC0000</frame-color>
 		<fill-color>#CC0000</fill-color>
 		<frame-brightness>0</frame-brightness>
@@ -687,8 +701,8 @@
 		<source>102/0@1</source>
 	</properties>
 	<properties>
-		<frame-color>#CCF33F</frame-color>
-		<fill-color>#CCF33F</fill-color>
+		<frame-color>#CCF2FF</frame-color>
+		<fill-color>#CCF2FF</fill-color>
 		<frame-brightness>0</frame-brightness>
 		<fill-brightness>0</fill-brightness>
 		<dither-pattern>I15</dither-pattern>
@@ -699,6 +713,62 @@
 		<animation>0</animation>
 		<name>102/1 LIGHTPASS</name>
 		<source>102/1@1</source>
+	</properties>
+	<properties>
+		<frame-color>#CC0000</frame-color>
+		<fill-color>#CC0000</fill-color>
+		<frame-brightness>0</frame-brightness>
+		<fill-brightness>0</fill-brightness>
+		<dither-pattern>I13</dither-pattern>
+		<visible>true</visible>
+		<transparent>true</transparent>
+		<width>1</width>
+		<marked>false</marked>
+		<animation>0</animation>
+		<name>103/0 FullCore6nmSPF</name>
+		<source>103/0@1</source>
+	</properties>
+	<properties>
+		<frame-color>#CC0000</frame-color>
+		<fill-color>#CC0000</fill-color>
+		<frame-brightness>0</frame-brightness>
+		<fill-brightness>0</fill-brightness>
+		<dither-pattern>I13</dither-pattern>
+		<visible>true</visible>
+		<transparent>true</transparent>
+		<width>1</width>
+		<marked>false</marked>
+		<animation>0</animation>
+		<name>103/1 FullCore4nm</name>
+		<source>103/1@1</source>
+	</properties>
+	<properties>
+		<frame-color>#CC0000</frame-color>
+		<fill-color>#CC0000</fill-color>
+		<frame-brightness>0</frame-brightness>
+		<fill-brightness>0</fill-brightness>
+		<dither-pattern>I13</dither-pattern>
+		<visible>true</visible>
+		<transparent>true</transparent>
+		<width>1</width>
+		<marked>false</marked>
+		<animation>0</animation>
+		<name>103/2 FullCore2nm</name>
+		<source>103/2@1</source>
+	</properties>
+	<properties>
+		<frame-color>#CC0000</frame-color>
+		<fill-color>#CC0000</fill-color>
+		<frame-brightness>0</frame-brightness>
+		<fill-brightness>0</fill-brightness>
+		<dither-pattern>I2</dither-pattern>
+		<visible>true</visible>
+		<transparent>true</transparent>
+		<width>2</width>
+		<marked>false</marked>
+		<animation>0</animation>
+		<name>103/3 FullTrench2nm</name>
+		<source>103/3@1</source>
 	</properties>
 	 <name/>
 </layer-properties>

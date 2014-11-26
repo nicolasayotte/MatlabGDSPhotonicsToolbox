@@ -5,15 +5,15 @@ function cad = ProjectDefinition(log)
 
 
 %% Project information
-cad = struct('author', 'Author', ...       % project lead author or company
+cad = struct('author', 'Nick', ...       % project lead author or company
   'fab', 'fabName', ...                  % fabrication facility
   'process', 'processName', ...          % fabrication process
   'run', 'runName', ...                  % run name
   'name', 'projectName', ...             % project name
-  'layermap', 'TEST_fab', ...            % layer map name
+  'layermap', 'IME_OpSIS', ...           % layer map name
   'uunit', 1e-6, ...                     % CAD scale (1e-6 - > microns)
   'dbunit', 1e-11, ...                   % CAD database unit (1e-11 - > nm)
-  'size', [10000, 2000], ...             % Floorplan dimensions
+  'size', [6000, 2000], ...             % Floorplan dimensions
   'margin', struct('left', 100, 'right', 0, 'top', 0, 'bottom', 50), ...   % safety margin
   'v', 'v1');                           % version number
 

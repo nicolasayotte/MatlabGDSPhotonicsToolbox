@@ -1,0 +1,117 @@
+
+- delete_list: has a bug: NULL is not returned correctly
+
+- 'flatten' method for libraries to replace all sref and aref elements
+  with the contents of the referenced structures (removes hierarchy).
+
+- calculate bounding boxes of elements, structures and libraries
+  (bbox methods)
+
+- mitering of paths with acute angles in 'poly_path.m'
+
+- more scripts: gdsextract: extract structures from gds libraries
+                gdswindow:  extract data in a window
+                gdsfilter:  extract data by layer
+		gdsrename:  rename structures in a gds 
+		gdsflatten: flatten the hierarchy in a gds file
+		
+- fix gdsmerge so that it can handle duplicate structure names.
+
+- filter function to copy e.g. individual layers or elements of a
+  specified type
+
+
+----------------------------------------------------------
+
+- how to handle external libraries ? (NOT NEEDED)
+
+- new Clipper library 5.0.x (DONE)
+
+- Fix: PLEX heads are not identified when reading a plex; must be 
+  made negative when bit 24 is set. (DONE)
+
+- low level mex functions gds_read_element and gds_write_element to
+  speed reading and writing of library files. The new I/O functions are
+  about a factor of 5 faster than the previous ones. Should be good for 
+  libraries with 100 million elements or so. (DONE) 
+  
+- make the xy property of boundary and path elements always a cell array
+  internally, because it simplifies the methods of the gds_element
+  class. (DONE)
+
+- srename method for the gds_library class to rename a structure and
+  all sref and aref elements that reference the structure. (DONE)
+
+- support the FORMAT and MASK related record types (NO, too archaic and
+  makes no sense for this toolbox.)
+
+- there is still a bug: elements can have more than one property
+  record. (DONE) 
+
+- use a sparse matrix for the adjacency matrix. (DONE)
+  The adjacency matrix of structure graphs with thousands of 
+  structures no longer consumes too much memory.
+
+- rename layerstat --> layerinfo (DONE)
+
+- use 'ismember' in adjmatrix.m (DONE)
+
+- in adjmatrix.m, @(x)sname(x) --> @sname (DONE) 
+
+- poly_convert method for libraries (DONE)
+
+- improve poly_convert for structures - always convert all elements to 
+  boundaries (PARTLY DONE - text and node elements are ignored)
+  
+- methods to calculate and change boundary orientation (DONE)
+
+- better tutorial especially on working with structures/libraries
+  (partly DONE)
+
+- speed up library reading. (DONE - as much as possible in pure Octave/MATLAB)
+
+- tree view of structures in a library (DONE)
+
+- don't discard record dates  (DONE)
+
+- subtree method to copy a structure and all dependent children
+  from a library (DONE)
+
+- new methods: (DONE)
+  * add_struct for structures (adds an sref
+  * add_element for structures
+  * add_struct for libraries
+  these make a hierarchical design syntactically more obvious
+  
+- update polygon font to a complete font based on the DEPLOF font (DONE)
+
+- methods for elements
+  * poly_box
+  * poly_text
+  * poly_path
+  convert the respective elements into boundary elements (DONE)
+
+- support for path type 4, if I can figure out what it is. (DONE)
+
+- make 'gds_structure' more flexible by allowing to pass structures
+  and cell arrays of structures. This will result in creation of 'sref'
+  elements for each structure that is passed as an argument. (DOESN'T work,
+  because it is not possible to add parameters of the sref's.)
+
+- make 'write_gds_library' check if all structures are referenced and
+  print a warning if not. NOT NECESSARY; it can be checked
+  immediately by inspecting the layout - only slows down writing
+  of files, especially when there are many structures.
+  
+- integrate polygon clipper into the gdsii library. (DONE)
+
+- a method for creating compound elements from simple boundary,
+  path, and sref elements.  (Use '+' operator ??) (DONE)
+
+- better directory structure (DONE)
+
+- rewrite all higher level functions to use object oriented 
+  functions.(DONE)
+
+- method for gds_library to summarize structure and element statistics
+  (DONE)

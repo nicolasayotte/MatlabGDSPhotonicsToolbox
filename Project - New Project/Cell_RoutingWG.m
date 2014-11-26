@@ -6,9 +6,9 @@
 
 
 %% Initialize Cell Parameters
-tp = cd; cd ..; addpath(genpath(cd)); cd(tp);     % add path to every folder of the library
+tp = cd; cd ../Functions/; addpath(genpath(cd)); cd(tp);     % add path to every folder of the library
 [log, cad, cellname, topcell, layerMap] = InitializeCell();
-delete('Cells/ * _put.mat');
+delete('Cells/*_put.mat');
 
 
 %% Load GDS Library References
@@ -19,7 +19,7 @@ refs = GetRefsFloorplan(refs);
 
 %% Define general structures
 phW = Waveguide([0.5, 3.5], [layerMap.FullCore, layerMap.FullClad], 5, 3.5);
-fA = FiberArray(90, 30 * sqrt(3), 30, ceil(refs(1).floorplan.size(1)/5) * 5, ceil(refs(1).floorplan.size(2)/5) * 5, 20);
+fA = FiberArray(200, 30 * sqrt(3), 30, ceil(refs(1).floorplan.size(1)/5) * 5, ceil(refs(1).floorplan.size(2)/5) * 5, 20);
 
 
 %% Load the cell floorplan and positioning information
@@ -37,79 +37,95 @@ topcell = add_element(topcell, marginElement);
 
 %% Placing cells A and B
 % Put Cell_A_StraightWG
-[topcell, cellInfo] = PutCell(topcell, cad, cellInfo, layerMap, ...
+[topcell, cellInfo, infoIn, infoOut] = PutCell(topcell, cad, cellInfo, layerMap, log, ...
    'Cell_A_StraightWG', 'anchor', 'floorplan', 'verticalAlign', 'bottomInside', ...
    'horizontalAlign', 'leftInside');
+infoA = MergeInfo(infoIn, infoOut);
+[topcell, ~, ~, arraySize] = PlaceCouplerArray(topcell, infoA, 2, phW, fA, refs(1).cellname, layerMap, 'type', 'cladding', 'direction', 1);
+
 
 % Put Cell_B_Microrings
-[topcell, cellInfo, infoIn, infoOut] = PutCell(topcell, cad, cellInfo, layerMap, ...
-   'Cell_B_Microrings', 'anchor', 'Cell_A_StraightWG', 'verticalAlign', 'topOutside', ...
-   'horizontalAlign', 'leftInside', 'offset', [0, 0], 'strans', struct('angle', 180, 'reflect', 1));
+[topcell, cellInfo, infoIn, infoOut] = PutCell(topcell, cad, cellInfo, layerMap, log, ...
+   'Cell_B_Microrings', 'anchor', 'Cell_A_StraightWG', 'verticalAlign', 'bottomInside', ...
+   'horizontalAlign', 'rightInside', 'strans', struct('angle', -90, 'reflect', 0), 'offset', [arraySize(1), 0]);
 infoB = MergeInfo(infoIn, infoOut);
-[topcell, ~, ~, arraySize] = PlaceCouplerArray(topcell, infoB, 4, phW, fA, refs(1).cellname, layerMap, 'type', 'cladding', 'direction', -1, 'text', 'strWg_coupler_', 'textIndex', 2);
+text123 = arrayfun(@(x) ['Square root index ' num2str(x, '%1.8f')], (1:7).^0.5, 'UniformOutput', false);
+[topcell, ~, ~, arraySize] = PlaceCouplerArray(topcell, infoB, 4, phW, fA, refs(1).cellname, layerMap, 'type', 'cladding', 'direction', 1, 'text', text123, 'textIndex', 2);
 
 
-%% Placing cells C, D and E
-% Put Cell_E_CustomIBGs
-% Anchoring using different vertical and horizontal anchors
-[topcell, cellInfo, infoIn, infoOut, cellERect] = PutCell(topcell, cad, cellInfo, layerMap, ...
-   'Cell_E_CustomIBGs', 'anchorVertical', 'Cell_B_Microrings', 'verticalAlign', 'topOutside', ...
-   'anchorHorizontal', 'Cell_A_StraightWG', 'horizontalAlign', 'leftInside', ...
-   'offset', [arraySize(2) + phW.r + 2.5 * phW.sp, 0], 'strans', struct('angle', 180, 'reflect', 0));
-[topcell, infoOut] = PlaceArc(topcell, infoOut, -180, phW.r, phW.w, phW.layer, phW.dtype, 'group', true, 'distance', phW.sp);
-[topcell, infoOut] = PlaceRect(topcell, infoOut, abs(cellERect(1, 1) - cellERect(3, 1)), phW.w, phW.layer, phW.dtype);
-infoE = MergeInfo(infoIn, infoOut);
-[topcell, infoE] = PlaceSBend(topcell, infoE, 100, -0.75, phW.r, phW.w, phW.layer, phW.dtype, 'group', true, 'distance', phW.sp, 'align', 'bottom');
-
+%% Cells C and D
 % Put Cell_C_CompactIBGs
-[topcell, cellInfo, infoIn, infoOut] = PutCell(topcell, cad, cellInfo, layerMap, ...
-   'Cell_C_CompactIBGs', 'anchor', 'floorplan', 'verticalAlign', 'topInside', ...
-   'horizontalAlign', 'leftInside', 'offset', [0, 0], 'strans', struct('angle', -90, 'reflect', 0));
+[topcell, cellInfo, infoIn, infoOut] = PutCell(topcell, cad, cellInfo, layerMap, log, ...
+   'Cell_C_CompactIBGs', 'anchor', 'Cell_A_StraightWG', 'verticalAlign', 'topOutside', ...
+   'horizontalAlign', 'leftInside', 'offset', [0, 5], 'strans', struct('angle', -90, 'reflect', 0));
 infoC1 = MergeInfo(infoIn, infoOut);
+numC = size(infoC1.pos, 1);
 
 % Put Cell_C_CompactIBGs for a second time (index 2)
-[topcell, cellInfo, infoIn, infoOut, cellCRect] = PutCell(topcell, cad, cellInfo, layerMap, ...
-   'Cell_C_CompactIBGs', 'anchor', 'Cell_C_CompactIBGs', 'verticalAlign', 'topInside', ...
-   'horizontalAlign', 'rightOutside', 'offset', [0, 0], 'strans', struct('angle', -90, 'reflect', 0));
+[topcell, cellInfo, infoIn, infoOut,] = PutCell(topcell, cad, cellInfo, layerMap, log, ...
+   'Cell_C_CompactIBGs', 'anchor', 'Cell_C_CompactIBGs', 'verticalAlign', 'bottomInside', ...
+   'horizontalAlign', 'rightOutside', 'strans', struct('angle', -90, 'reflect', 0));
 infoC2 = MergeInfo(infoIn, infoOut);
 infoC = MergeInfo(infoC1, infoC2);
 
+
 % Put Cell_D_RidgeIBGs
 % Anchoring to the second placement of Cell_C_CompactIBGs using 'anchorIndex', 2
-[topcell, cellInfo, infoIn, infoOut, cellDRect] = PutCell(topcell, cad, cellInfo, layerMap, ...
-   'Cell_D_RidgeIBGs', 'anchor', 'Cell_C_CompactIBGs', 'verticalAlign', 'topInside', ...
-   'horizontalAlign', 'rightOutside', 'offset', [0, 0], 'strans', struct('angle', -90, 'reflect', 0), ...
+[topcell, cellInfo, infoIn, infoOut] = PutCell(topcell, cad, cellInfo, layerMap, log, ...
+   'Cell_D_RidgeIBGs', 'anchor', 'Cell_C_CompactIBGs', 'verticalAlign', 'bottomInside', ...
+   'horizontalAlign', 'rightOutside', 'strans', struct('angle', -90, 'reflect', 0), ...
    'anchorIndex', 2);
 infoD = MergeInfo(infoIn, infoOut);
+numD = size(infoD.pos, 1);
+infoCD = MergeInfo(infoC, infoD);
 
-cellCHeight = abs(cellCRect(1, 2) - cellCRect(3, 2));
-cellDHeight = abs(cellDRect(1, 2) - cellDRect(3, 2));
 
-[topcell, infoD] = PlaceRect(topcell, infoD, 46.5 + cellCHeight - cellDHeight - phW.sp * size(infoD.pos, 1), phW.w, phW.layer, phW.dtype);
-[topcell, infoD] = PlaceArc(topcell, infoD, 90, phW.r, phW.w, phW.layer, phW.dtype, 'group', true, 'distance', phW.sp);
+[topcell, infoCD] = PlaceRect(topcell, infoCD, 0, phW.w, phW.layer, phW.dtype,...
+   'group', true, 'align', true);
+[topcell, infoCD] = PlaceArc(topcell, infoCD, -90, phW.r, phW.w, phW.layer, phW.dtype,...
+   'group', true, 'distance', phW.sp);
+[topcell, infoCD, infoTest, arraySize] = PlaceCouplerArray(topcell, infoCD, 2, phW, fA, ...
+   refs(1).cellname, layerMap, 'type', 'cladding', 'direction', -1);
 
-[topcell, infoC] = PlaceRect(topcell, infoC, 46.5, phW.w, phW.layer, phW.dtype);
-[topcell, infoC] = PlaceArc(topcell, infoC, 90, phW.r, phW.w, phW.layer, phW.dtype, 'group', true, 'distance', phW.sp);
-[topcell, infoC] = PlaceRect(topcell, infoC, abs(infoC.pos(1, 1) - infoD.pos(1, 1)), phW.w, phW.layer, phW.dtype);
 
-[topcell, infoCOut, ~, arraySize] = PlaceCouplerArray(topcell, MergeInfo(infoC, infoD), 2, phW, fA, refs(1).cellname, layerMap, 'type', 'cladding');
-
-indicesOut = [1 : 10, 21 : 30, 41 : 48];
-indicesIn = [11 : 20, 31 : 40, 49 : 56];
-totalLengths = infoCOut.length(indicesOut, 1) + infoCOut.length(indicesIn, 1);
-
-strEl = arrayfun(@(x, y, len) gds_element('text', 'text', ['Length : ' num2str(len, '%01.1f')], 'xy', [x, y], 'layer', layerMap.TXT(1)), infoCOut.pos( indicesOut , 1), infoCOut.pos( indicesOut , 2), totalLengths( : , 1), 'UniformOutput', 0);
+indicesIn = [(1:numC/2), (1:numC/2) + numC, (1:numD/2) + 2 * numC];
+indicesOut = [(1:numC/2) + numC/2, (1:numC/2) + 1.5 * numC, (1:numD/2) + 2 * numC + numD/2];
+totalLengths = infoCD.length(indicesOut, 1) + infoCD.length(indicesIn, 1);
+strEl = arrayfun(@(x, y, len) gds_element('text', 'text', ['Length : ' num2str(len, '%01.1f')],...
+   'xy', [x, y], 'layer', layerMap.TXT(1)), infoCD.pos( indicesOut , 1), infoCD.pos( indicesOut , 2),...
+   totalLengths( : , 1), 'UniformOutput', 0);
 topcell = add_element(topcell, strEl');
 
-% Put Cell_C_CompactIBGs for a second time (index 2)
-[topcell, cellInfo, infoIn, infoOut, cellCRect] = PutCell(topcell, cad, cellInfo, layerMap, ...
-   'Cell_F_MZI', 'anchor', 'Cell_A_StraightWG', 'verticalAlign', 'bottomInside', ...
-   'horizontalAlign', 'rightOutside', 'offset', [50, 0], 'strans', struct('angle', -90, 'reflect', 0));
+
+%% Put Cell E and F
+% Put Cell_E_CustomIBGs
+[topcell, cellInfo] = PutCell(topcell, cad, cellInfo, layerMap, log, ...
+   'Cell_E_CustomIBGs', 'anchor', 'floorplan', 'verticalAlign', 'topInside', ...
+   'horizontalAlign', 'leftInside');
+
+
+% Put Cell_F_MZI
+[topcell, cellInfo] = PutCell(topcell, cad, cellInfo, layerMap, log, ...
+   'Cell_F_MZI', 'anchor', 'Cell_E_CustomIBGs', 'verticalAlign', 'bottomOutside', ...
+   'horizontalAlign', 'leftInside');
+
+
+% Put Cell_G_MMI
+[topcell, cellInfo] = PutCell(topcell, cad, cellInfo, layerMap, log, ...
+   'Cell_G_MMI', 'anchorVertical', 'floorplan', 'verticalAlign', 'center', ...
+   'anchorHorizontal', 'Cell_D_RidgeIBGs', 'horizontalAlign', 'rightOutside', 'offset', [arraySize(1), 0],...
+   'strans', struct('angle', 90, 'reflect', 0));
+
+
+% Put Cell_H_Aref_internalRef
+[topcell, cellInfo] = PutCell(topcell, cad, cellInfo, layerMap, log, ...
+   'Cell_H_Aref_internalRef', 'anchor', 'Cell_G_MMI', 'verticalAlign', 'center', ...
+   'horizontalAlign', 'rightOutside');
 
 
 %% Save .gsd and .mat cell information
 % Put Cell_RoutingWG and Finalize cell
-[topcell, cellInfo] = PutCell(topcell, cad, cellInfo, layerMap, ...
+[topcell, cellInfo] = PutCell(topcell, cad, cellInfo, layerMap, log, ...
    'Cell_RoutingWG', 'anchor', 'absolute', 'offset', [0, 0]);
 
 infoIn = [];      infoOut = [];

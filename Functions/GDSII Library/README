@@ -1,0 +1,77 @@
+
+Octave / MATLAB Toolbox for GDS II Stream Format
+================================================
+
+Ulf Griesmann, NIST, 2008 - 2014 
+ulf.griesmann@nist.gov, ulfgri@gmail.com
+
+This software is in the Public Domain, with the exception
+of the functions for Boolean set operations.
+
+New versions of the toolbox can be downloaded from:
+
+https://sites.google.com/site/ulfgri/numerical/gdsii-toolbox
+
+These functions are particularly useful when a layout is the result 
+of a computation. MATLAB / Octave can then be used as a macro language
+for writing the layout. 
+
+
+Functions
+=========
+Toolbox functions are grouped into the following directories:
+
+Basic:
+    Contains the low level functions for reading and writing
+    of files in GDS II stream format and defines objects and
+    methods for working with GDS II layouts.
+
+Elements:
+    Contains functions that return gds_element objects.
+
+Structures:
+    Contains functions that return gds_structure objects
+
+Boolean: 
+    The GDS II toolbox contains a method that performs boolean
+    set operations on boundary elements. This is described in more
+    detail in the file: README-Boolean / README-Boolean.pdf
+
+Misc:
+    Functions that don't return gds_* objects.
+    
+Scripts:
+    Command line scripts for Octave that can be run directly
+    from the shell prompt in a Linux / Unix environment.
+
+
+Compiling
+=========
+This software contains several MEX functions, which must be 
+compiled with a C compiler (and a C++ compiler for the Clipper
+library), before the library can be used. The C compiler must be
+sufficiently C99 conformant; the LCC compiler that is included with
+earlier versions of MATLAB will not compile many of the mex functions
+(see the MATLAB documentation for compiling external functions).
+
+For Octave, the mex functions are compiled by executing 
+
+$ ./makemex-octave
+
+at the shell prompt. In MATLAB the mex functions can be compiled by
+changing to the ./gdsii directory and running
+
+>> makemex
+
+at the MATLAB command prompt. 
+
+
+Useful Stuff
+============
+Very good viewer and editor for GDS II files: http://www.klayout.de
+
+
+Help
+====
+If you find a bug in the software, please send a message to 
+ulf.griesmann@nist.gov or ulfgri@gmail.com and I will try to fix it.

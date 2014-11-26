@@ -1,0 +1,21 @@
+The files in this directory are command line scripts
+for Octave that can be run directly from a Linux/Unix 
+shell prompt. They should be installed in a suitable 
+directory, e.g. /usr/local/bin .
+
+
+gdstree: 
+Displays the hierarchy graph of structures in a gds library file. 
+
+gdslayers:
+Displays the distribution of elements over the layers in a gds library
+file.
+
+gdsmerge:
+Merges one or more gds library files while preserving the hierarchy.
+
+cgdsconv:
+Converts layout files from compound GDS format (.cgds) to standard 
+GDS II (.gds) format. 
+
+All scripts display a help text when they are run without argument(s).

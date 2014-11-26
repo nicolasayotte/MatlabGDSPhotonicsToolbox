@@ -1,5 +1,0 @@
-#!/bin/sh
-#
-# shell script for cleaning up trash
-#
-rm -f `find . -name \*.mex -or -name \*.o -or -name \*~ -or -name \*.ps`

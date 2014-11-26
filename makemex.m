@@ -1,11 +1,10 @@
 %% Compiling the mex files
-
-cd 'Functions - Utils'
+cd 'Functions';
+cd 'Utils';
 mex -O CornersToRects.c;
-
+mex -O RotTransXYCell.c;
 cd ..
 
-cd 'Functions - GDSII Library'
-makemex
-
+cd 'GDSII Library';
+makemex;
 cd ..

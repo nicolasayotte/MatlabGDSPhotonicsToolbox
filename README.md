@@ -3,61 +3,49 @@ Matlab GDS Photonics Toolbox
 
 This is a Matlab library of functions to facilitate the design of Photonics Integrated Circuits GDS layouts that I have developped with Alexandre D. Simard during my PhD.
 
-This is oriented towards intuitive and adaptable creation of GDS layout files for fabrication in different facilities across the world. The toolbox creates a GDS based on a custom general layer map, but can be set up to export to any other layer map once the design is done.
+This is oriented towards intuitive and adaptable creation of GDS layout files for fabrication in different facilities across the world. The toolbox creates a GDS based on a general layer map, but can be set up to export to any other layer map once the design is done.
 
-Nicolas Ayotte and Alexandre D. Simard have used this library to create multiple layouts (quickly) for different fabrication facilities across the world with successful results.
+Nicolas Ayotte and Alexandre D. Simard have used this library to efficiently create multiple layouts for different fabrication facilities across the world with successful results.
 
 Features
 --------
-- Fast and intuitive waveguide routing including group turns and group s-bends and the possibility to customize inter-waveguide distance at any point.
-- Access to the travelled distance (physical or optical) of any waveguide offering a quick way to measure your devices
+- Relative orientation group waveguide routing including turns, tapers, s-bends and the possibility to customize inter-waveguide distance at any point.
+- Access to the travelled distance (physical or optical) of any waveguide offering a quick way to measure your devices.
 - Possibility of referencing premade structures (fiber couplers, directional couplers, detectors, etc.)
-- Premade functions for microrings and Bragg gratings..
+- Possibility of referencing custom structures created on the fly.
+- Premade functions for microrings, Bragg gratings, multi-mode interferometer, contra-directional couplers, output array of fiber couplers, etc.
 - Tutorial project with many cells showcasing the features.
-- A PDF presentation presenting the library's purpose.
-- Intuitive cell placement in the master floorplan for easy teamwork.
-- Includes functions to export to other layer, possibly including boolean operations on the layers.
-- Untested learning curve! Come and test it yourself. :)
+- A PDF presentation presenting the library's purpose and principles.
+- Intuitive relative cell placement in the master floorplan for easy teamwork.
+- Relative and scalable routing solution.
+- Includes functions to export to other layer maps, including boolean operations on the layers.
+- Easy scripting language (i.e.: Matlab).
 
 It is strongly encouraged to get the free software KLayout to look at your GDS files:
 http://www.klayout.de/
 
 Suggested first steps
 ---------------------
-First contact with the library :
-- There will be a PDF library presentation up soon!
-- Open the Functions - GDSII Library Folder
-- Verify run makemex (and possibly mex -setup before that) to compile the base library from Ulf.
-- Open Project - New Project
-- Run the Main.m, read ProjectDefinition.m
-- Go through the code of the cells and look at the resulting .gds files
+- Look through the PDF presentation
+- (Optional) Run the command "mex -setup" to install a C compiler in matlab.
+- Run the makemex.m function in the main folder to compile all the C functions needed for the library.
+- Open the tutorial project folder: Project - New Project
+- Go through the Cells script, run them, look at the resulting .gds files.
+- Look at the Cell_RoutingWG.m script that places the cell in the floorplan.
+- Read at the ProjectDefinition.m file.
+- Run the Main.m to merge the gds cells and export to the ouput layer map.
 - Duplicate the Project folder and make your own!
 
 License
 ---------
-MIT License. Copyright 2014 Nicolas Ayotte and Alexandre D. Simard
+Copyright © 2014 Nicolas Ayotte and Alexandre D. Simard
 
-Permission is hereby granted, free of charge, to any
-person obtaining a copy of this software and associated
-documentation files (the "Software"), to deal in the
-Software without restriction, including without limitation
-the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the
-Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+MIT License
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice
-shall be included in all copies or substantial portions of
-the Software.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
-KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
-OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 GDS II Toolbox
 -----------------------------
