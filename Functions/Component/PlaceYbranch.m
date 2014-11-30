@@ -14,7 +14,8 @@ infoout1 = info;
 infoout2 = info;
 
 ybranchinfo = load(filename(1:end-4));
-ybranchinfo = ybranchinfo.cells.Ybranch.floorplan;
+% ybranchinfo = ybranchinfo.cells.Ybranch.floorplan;
+ ybranchinfo = ybranchinfo.cells.(refname).floorplan; % Raphael suggestion (to confirm)
 
 for row = 1 : rows
    switch inputport

@@ -8,7 +8,7 @@ function CastLayerMap(filename, mapName, mapType, log)
 %                                   'output' to export from 'ulaval' layer map
 %     log               1           log object
 %
-%     See also READLAYERMAP, CASTDEFINEMAP, CASTPOSTPROCESSING, CASTSTRUCTURELAYER.
+%     See also READLAYERMAP, CASTDEFINEMAP, CASTPREPROCESSING, CASTSTRUCTURELAYER.
 
 log.write('\n\t%s  -  %s\n\n', log.title(), log.time());
 
@@ -47,7 +47,7 @@ outlib = set(outlib, 'lname', outlibname);
 log.write('\t\tDefining the layers bijective map\n');
 [mapLayer, mapDatatype] = CastDefineMap(mapName, mapType);
 
-log.write('\t\tPost-processing structures\n');
+log.write('\t\tPre-processing structures\n');
 structs = libraryfun(outlib, @(st) CastPreProcessing(st, mapName, mapType, log));
 outlib = set(outlib, 'st', structs);
 

@@ -9,24 +9,21 @@ hasInstructions = true;
 if(strcmpi(mapType, 'input'))
    switch mapName
       case 'UoW'
-         
-      case 'test'
-
+         %          st = cellfun(@(x)SubstractLayer(x, [103, 2], [103,3], [1, 0]), st);
+         %          st = cellfun(@(x)OffsetLayer(x, 2, 1, 3.5, 'jtMiller'), st);
       otherwise
          hasInstructions = false;
    end
 else
    switch mapName
       case 'UoW'
-         
-      case 'test'
-         % This operation cuts all the area on [1, 0] which is enclosed in the 
+         % This operation cuts all the area on [1, 0] which is enclosed in the
          % [2, 1] layer and puts it on the [104, 2] layer. It leaves all the area on
          % on [1, 0] NOT surrounded by [2, 1] on its original layer. This is a selective
          % layer casting operation.
          
-         st = AndLayer(st, [1, 0], [2, 1], [104, 2], 'discardRemains', false);
-         st = AndLayer(st, [1, 0], [3, 1], [104, 3], 'discardRemains', false);
+         st = AndLayer(st, [1, 0], [2, 1], [104, 3]);
+         st = AndLayer(st, [1, 0], [3, 1], [104, 2]);
          % Then cast layer [104, 2] and [104, 3] onto other layers in the standard
          % CastLayerMap operation
       otherwise
@@ -81,7 +78,7 @@ end
 
 function st = AndLayer(st, sourceLayer, andLayer, targetLayer, varargin)
 
-options.discardRemains = true;
+options.discardRemains = false;
 options = ReadOptions(options, varargin{:});
 
 refEls = find(st, @(el) is_etype(el, 'sref') || is_etype(el, 'aref'));
@@ -101,6 +98,9 @@ if(all([~isempty(sourceEls), ~isempty(andEls)]))
    
    targetEl = {poly_bool(sourceEl, andEl, 'and', 'layer', targetLayer(1), 'dtype', targetLayer(2))};
    partialEl = {poly_bool(sourceEl, andEl, 'notb')};
+   
+   targetEl = {CheckForLargePolygons(targetEl{1})};
+   partialEl = {CheckForLargePolygons(partialEl{1})};
 
    if ~options.discardRemains
       boundEls = [boundEls, partialEl];
@@ -114,13 +114,3 @@ st = set(st, 'numel', length([refEls, boundEls, targetEl, textEls]));
 end
 
 
-
-function el = MergeElements(els)
-el = els{1};
-if(length(els) > 1)
-   for ii = 2 : length(els)
-      el = add_poly(el, els{ii}.xy);
-   end
-end
-
-end

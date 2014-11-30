@@ -26,10 +26,6 @@ if (rows > 1)
     error('There must be a single cursor in each cursor')    
 end
 
-if (abs(mod(info1.ori, 180) - mod(info2.ori, 180)) > 1e-9)
-    error('The propagation directions must be parallel.')    
-end
-
 
 %% Distance calculations
 pos1 = RotTransXY(info1.pos, [0,0], -info1.ori);

@@ -1,5 +1,4 @@
 function [structure, info, infoInput] = PlaceRect(structure, info, len, wid, layer, datatype, varargin)
-
 %PLACERECT places rectangular polygons in a gds structure
 %Author : Nicolas Ayotte                                     Creation date : 28/11/2013
 %
@@ -98,7 +97,7 @@ for row = 1 : rows
             rectEl{row + (col - 1) * rows} = gds_element('boundary', 'xy', RotTransXY(xy, info.pos(row, : ), info.ori(row)), 'layer', layer(row, col), 'dtype', datatype(row, col));
          end
       end
-   end
+   end 
 end
 structure = add_element(structure, rectEl(cellfun(@(x)~isempty(x), rectEl)));
 info.pos = info.pos + RotTransXY([len, options.offset], [0, 0], info.ori);

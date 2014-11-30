@@ -8,6 +8,7 @@ function [structure, InfoOut, infoIn] = PlaceMMI(structure, info, wgIn, wgOut, m
 %     OPTION NAME       SIZE        DESCRIPTION
 %     'nout'            1           [] number of outputs
 %                                   by default it is the same as the number of inputs
+%     'sBendIn'         1           [true] place a s-bend at the input
 %     'sBendOut'        1           [true] place a s-bend at the output
 %     'taperIn'         1           [true] place a taper at the input
 %     'taperOut'        1           [true] place a taper at the output
@@ -23,10 +24,12 @@ rows = size(info.pos, 1);
 
 %% Default values for valid options
 options.nout = [];
+options.sBendIn = true;
 options.sBendOut = true;
-options.taperOut = true;
 options.taperIn = true;
-options.sBendLength = 0;
+options.taperOut = true;
+options.sBendIn = true;
+options.sBendLength = 0;      % if <= 0, sBendLength is "minimumLength"
 options.backgroundRect = false;
 options.type = 'cladding';
 options = ReadOptions(options, varargin{:});
@@ -62,12 +65,12 @@ inputDistance = sectionWidth;
 
 
 %% Input waveguides sbent
-if (rows > 1)
+if (rows > 1 && options.sBendIn)
    %    [structure, info] = PlaceRect(structure, info, 5, wgIn.w, wgIn.layer, wgIn.dtype);
    %    [structure, info, infodrcclean] = PlaceSBend(structure, info, options.sBendLength, 0, wgIn.r, wgIn.w, wgIn.layer, wgIn.dtype, ...
    [structure, info] = PlaceSBend(structure, info, options.sBendLength, 0, wgIn.r, wgIn.w, wgIn.layer, wgIn.dtype, ...
       'group', true, 'distance', inputDistance, 'backgroundRect', options.backgroundRect, ...
-      'type', options.type, 'minimumLength', ~(options.sBendLength > 0));
+      'type', options.type, 'minimumLength', options.sBendLength <= 0);
    %    infodrccleanpos = mean(infodrcclean.pos);
    %    infodrcclean = InvertInfo(SplitInfo(infodrcclean, 1));infodrcclean.pos = infodrccleanpos;
 %    [structure, info] = PlaceRect(structure, info, 5, wgIn.w, wgIn.layer, wgIn.dtype);
@@ -134,11 +137,11 @@ end
 if options.taperOut
    taper = Taper([sectionWidth * mmi.ff, mmi.w(2) - sectionWidth], [wgOut.w(1), mmi.w(2) - sectionWidth], mmi.layer, mmi.dtype);
    [structure, info] = PlaceTaper(structure, info, taper, mmi.tapl);
-   if options.sBendOut
+   if (rows > 1 && options.sBendOut)
 %          [structure, info] = PlaceRect(structure, info, 5, wgOut.w, wgOut.layer, wgOut.dtype);
          [structure, info] = PlaceSBend(structure, info, options.sBendLength, 0, wgOut.r, wgOut.w, wgOut.layer, wgOut.dtype, ...
             'group', true, 'distance', wgOut.sp, 'backgroundRect', options.backgroundRect, ...
-            'type', options.type, 'minimumLength', ~(options.sBendLength > 0));
+            'type', options.type, 'minimumLength', options.sBendLength <= 0);
 %          [structure, info] = PlaceRect(structure, info, 5, wgOut.w, wgOut.layer, wgOut.dtype);
    end
 end

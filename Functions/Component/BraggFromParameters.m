@@ -14,7 +14,7 @@ function obragg = BraggFromParameters(len, w, period, corw, dc, chirp, phaseShif
 %     'corw'            1|n x 1|m      corrugation width
 %     'dc'              1|n x 1|m      duty cycle
 %     'chirp'           1|n x 1|m      chirp
-%     'phaseShift'      1|n x 1|m      phase shifts
+%     'phaseShift'      1|n x 1|m      phase shifts   (struct('pos',50,'value',pi))
 % 
 %     If the number of rows (n) in any of the arguments is higher that 1 then the output
 %     bragg structure will be a array of size n x 1
@@ -72,9 +72,11 @@ for row = 1 : rows
 
   for col = 1 : cols
      if(~isempty(phaseShift))
-        periods = round((obragg(row).len - obragg(row).period(col) * sum(obragg(row).phaseShift(col).value/(2 * pi)) - (1-obragg(row).dc(col)) * obragg(row).period(col))/(obragg(row).period(col) + 0.5 * obragg(row).chirp(col)));
+%         periods = round((obragg(row).len - obragg(row).period(col) * sum(obragg(row).phaseShift(col).value/(2 * pi)) - (1-obragg(row).dc(col)) * obragg(row).period(col))/(obragg(row).period(col) + 0.5 * obragg(row).chirp(col)));
+        periods = floor((obragg(row).len - obragg(row).period(col) * sum(obragg(row).phaseShift(col).value/(2 * pi)))/(obragg(row).period(col) + 0.5 * obragg(row).chirp(col)));
      else
-        periods = round((obragg(row).len - (1-obragg(row).dc(col)) * obragg(row).period(col))/(obragg(row).period(col) + 0.5 * obragg(row).chirp(col)));
+%         periods = round((obragg(row).len - (1-obragg(row).dc(col)) * obragg(row).period(col))/(obragg(row).period(col) + 0.5 * obragg(row).chirp(col)));
+        periods = floor((obragg(row).len)/(obragg(row).period(col) + 0.5 * obragg(row).chirp(col)));
      end
   
     % Number of elements
