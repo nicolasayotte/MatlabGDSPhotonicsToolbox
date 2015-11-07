@@ -1,6 +1,6 @@
 function [infoSorted, maskOriginalOrder, spacing] = CheckParallelAndNormal(info)
 %CHECKPARALLELANDNORMAL Return an info structure with the positions sorted according
-% to inscreasing distance in the normal direction to their orientation IF the
+% to increasing distance in the normal direction to their orientation IF the
 % vectors are parallel and aligned. If they are not it throws an error.
 %
 % It also sends the inverted sort mask to put the elements back into the original

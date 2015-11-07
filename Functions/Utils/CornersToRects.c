@@ -3,7 +3,7 @@
  *
  * MEX Script
  * File Creation : Nicolas Ayotte, May 2014
- * CornersToRects.cpp
+ * CornersToRects.c
  * _________________________________________________________________________*/
 
 

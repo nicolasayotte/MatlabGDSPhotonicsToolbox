@@ -1,6 +1,8 @@
 function log = SetupLog(varargin)
-%SETUPLOG Define a log object that is helpful in writing execution comments to the
-% command window or to a file.
+%SETUPLOG Define a log object that is helpful in writing execution comments
+% to the command window or to a file. This function was optimized so that 
+% you can leave the logs in the code and simply turn the logging off when 
+% it is not required.
 %
 %     Options:
 %       'do'      [bool]   only writes a log when set to true (default).
@@ -37,8 +39,9 @@ if(log.do)
   log.bar = @()sprintf('__________________________________________________________');
   log.time = @()sprintf('%0u:%02u:%05.2f', ConvertToTime(toc()));
 else
+    
   log.handle = [];
-  log.write = @(varargin)0;
+  log.write = @(varargin)0;  % This is a fast void function when log is disabled
   log.close = @()0;    % This is a fast void function
   log.bar = @()0;
   log.title = @()0;

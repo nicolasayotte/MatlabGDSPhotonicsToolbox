@@ -10,11 +10,11 @@ function xy = RotTransXY(xy, pos, ori)
 %     See also STRANSXY
 
 if(iscell(xy))
-%    if(exist('RotTransXYCell.mexw64', 'file') || exist('RotTransXYCell.mexw32', 'file'))
+   if(exist('RotTransXYCell.mexw64', 'file') || exist('RotTransXYCell.mexw32', 'file'))
       xy = RotTransXYCell(xy, pos, ori);
-%    else
-%       xy = cellfun(@(x)RotTransXY(@(x) x, pos, ori), xy, 'UniformOutput', false);
-%    end
+   else
+      xy = cellfun(@(x)RotTransXY(x, pos, ori), xy, 'UniformOutput', false);
+   end
 else
    xy = [xy(:,1) .* cosd(ori) - xy(:,2) .* sind(ori) + pos(1), xy(:,1) .* sind(ori) + xy(:,2) .* cosd(ori) + pos(2)];
 end

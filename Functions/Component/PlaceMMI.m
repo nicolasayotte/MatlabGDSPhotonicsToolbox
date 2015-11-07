@@ -91,7 +91,7 @@ end
 %% MMI rectangle
 if (rows > 1)
    
-   mmiWidth = mmi.w/2;
+   mmiWidth = mmi.w/rows;
    mmiWidth(2) = mmi.w(2) - sectionWidth;
    [structure, info] = PlaceRect(structure, info, mmi.len, mmiWidth, mmi.layer, mmi.dtype);
    

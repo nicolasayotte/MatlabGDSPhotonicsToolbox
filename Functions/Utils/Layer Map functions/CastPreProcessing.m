@@ -79,6 +79,7 @@ end
 function st = AndLayer(st, sourceLayer, andLayer, targetLayer, varargin)
 
 options.discardRemains = false;
+options.maxVertices = 8190;
 options = ReadOptions(options, varargin{:});
 
 refEls = find(st, @(el) is_etype(el, 'sref') || is_etype(el, 'aref'));
@@ -97,10 +98,10 @@ if(all([~isempty(sourceEls), ~isempty(andEls)]))
   andEl = MergeElements(andEls);
   
   targetEl = {poly_bool(sourceEl, andEl, 'and', 'layer', targetLayer(1), 'dtype', targetLayer(2))};
-  partialEl = {poly_bool(sourceEl, andEl, 'notb')};
+  partialEl = {poly_bool(sourceEl, andEl, 'notb', 'layer', sourceLayer(1), 'dtype', sourceLayer(2))};
   
-  targetEl = {CheckForLargePolygons(targetEl{1})};
-  partialEl = {CheckForLargePolygons(partialEl{1})};
+  targetEl = {CheckForLargePolygons(targetEl{1}, 'maxVertices', options.maxVertices)};
+  partialEl = {CheckForLargePolygons(partialEl{1}, 'maxVertices', options.maxVertices)};
 
   
   targetMask = true(1, length(targetEl));

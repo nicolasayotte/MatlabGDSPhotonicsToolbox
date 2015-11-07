@@ -8,3 +8,4 @@ cd ..
 cd 'GDSII Library';
 makemex;
 cd ..
+cd ..

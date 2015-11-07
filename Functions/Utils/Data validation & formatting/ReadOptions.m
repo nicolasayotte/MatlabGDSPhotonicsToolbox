@@ -3,7 +3,8 @@ function structure = ReadOptions(structure, varargin)
 % argument pairs: 'string', value.
 %
 %     This uses an input structure that defines the options handled as well as the
-%     default values for those options.
+%     default values for those options. Each field of the input structure
+%     represents an accepted option name.
 %
 %     Example: function structure = CreateStructure(varargin)
 %                structure = struct('invert', true, 'rotate', 90);
