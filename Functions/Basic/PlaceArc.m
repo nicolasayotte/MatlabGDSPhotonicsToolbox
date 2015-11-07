@@ -42,8 +42,9 @@ cols = size(layer, 2);
 %% Default values for valid options
 options.group = false;
 options.distance = [];
-options.type = 'cladding';
+options.type = 'normal';
 options.resolution = 30e-3;
+options.maxVertices = 199;
 options = ReadOptions(options, varargin{ : });
 
 
@@ -103,7 +104,7 @@ end
 [structure, info] = PlaceRect(structure, info, inputOffset, wid, layer, datatype); % Input Length Offset
 
 %% Arc elements
-arcEl = cell(1, rows * cols);
+arcEl = {};
 for row = 1 : rows
   
   if(strcmp(options.type, 'equidistant'))
@@ -118,6 +119,8 @@ for row = 1 : rows
     if(wid(row, col) > 0)
       if(~mod(col, 2) && strcmpi(options.type, 'cladding'))   % Cladding treament
         [shortSide, longSide] = MakeCladdingArc(ang, radius, wid, row, col);
+        arcxy = [shortSide; longSide(end : -1 : 1, : ); shortSide(1, : )];
+        arcxy( : , 2) = arcxy( : , 2) + radius;
       else
         switch options.type
           case 'metal'
@@ -130,14 +133,30 @@ for row = 1 : rows
         if((radius - 0.5 * wid(row, col)) < 0)
           noPtsShortSide = 1;
         end
-        anglesShort = linspace(0, ang(row), noPtsShortSide) - 90;
-        anglesLong = linspace(0, ang(row), noPtsLongSide) - 90;
-        shortSide = (max([radius - 0.5 * wid(row, col), 0])) * [cosd(anglesShort)', sind(anglesShort)'];
-        longSide = (radius + 0.5 * wid(row, col)) * [cosd(anglesLong)', sind(anglesLong)'];
+        if(noPtsShortSide + noPtsLongSide + 1 > options.maxVertices)
+          nel = ceil((noPtsShortSide + noPtsLongSide + 1 ) / options.maxVertices);
+          arcxy = cell(1, nel);
+          for el = 1 : nel
+            elAng = ang(row) / nel;
+            anglesShort = linspace((el - 1) * elAng, el * elAng, noPtsShortSide / nel) - 90;
+            anglesLong = linspace((el - 1) * elAng, el * elAng, noPtsLongSide / nel) - 90;
+            shortSide = (max([radius - 0.5 * wid(row, col), 0])) * [cosd(anglesShort)', sind(anglesShort)'];
+            longSide = (radius + 0.5 * wid(row, col)) * [cosd(anglesLong)', sind(anglesLong)'];
+            elArcxy = [shortSide; flipud(longSide); shortSide(1, : )];
+            elArcxy( : , 2) = elArcxy( : , 2) + radius;
+            arcxy{el} = elArcxy;
+          end
+        else
+          anglesShort = linspace(0, ang(row), noPtsShortSide) - 90;
+          anglesLong = linspace(0, ang(row), noPtsLongSide) - 90;
+          shortSide = (max([radius - 0.5 * wid(row, col), 0])) * [cosd(anglesShort)', sind(anglesShort)'];
+          longSide = (radius + 0.5 * wid(row, col)) * [cosd(anglesLong)', sind(anglesLong)'];
+          arcxy = [shortSide; flipud(longSide); shortSide(1, : )];
+          arcxy( : , 2) = arcxy( : , 2) + radius;
+        end
       end
-      arcxy = [shortSide; longSide(end : -1 : 1, : ); shortSide(1, : )];
-      arcxy( : , 2) = arcxy( : , 2) + radius;
-      arcEl{row + (col - 1) * rows} = gds_element('boundary', 'xy', RotTransXY(arcxy, info.pos(row, : ), info.ori(row) + 180 * (ang(row) < 0)), 'layer', layer(row, col), 'dtype', datatype(row, col));
+      arcEl = [arcEl, {gds_element('boundary', 'xy', RotTransXY(arcxy, info.pos(row, : ), ...
+        info.ori(row) + 180 * (ang(row) < 0)), 'layer', layer(row, col), 'dtype', datatype(row, col))}];
     end
   end
   
@@ -145,7 +164,7 @@ for row = 1 : rows
   info.pos(row, : ) = info.pos(row, : ) + radius * displacement;
 end
 
-structure = add_element(structure, arcEl((cellfun(@(x)~isempty(x), arcEl))));
+structure = add_element(structure, arcEl);
 info.ori = ConstrainAngle(info.ori + ang);  % ori E ]-180, 180]
 if(isempty(info.length)); info.length = zeros(rows, length(info.neff)); end
 info.length = info.length + repmat(pi * abs(ang) / 180 * radius, 1, length(info.neff)) .* (repmat(info.neff, rows, 1) .* repmat(sum(wid, 2) > 0, 1, size(info.neff, 2)));
