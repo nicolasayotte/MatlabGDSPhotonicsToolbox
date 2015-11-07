@@ -44,7 +44,7 @@ if(taper(1).group && rows > 1)
    if(~isempty(taper(1).distance))
       tdist = NumberOfColumns(rows - 1, taper(1).distance);
       spaceChange =  cumsum([0; tdist' - diff(spacing)]);
-      spaceChange = spaceChange - mean(spaceChange)/2;
+      spaceChange = spaceChange - mean(spaceChange);
       for row = 1 : rows
          taper(row).offset = taper(row).offset + spaceChange(row);
       end

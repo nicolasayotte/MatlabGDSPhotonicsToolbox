@@ -19,7 +19,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 	mwIndex cellIndex, matIndex;
 	mxArray *mat, *opos;
 	double *pr, *pos, *ori, *po;
-
+    double c, s;
 
 	// Get the number of elements in the input argument
 	cellSize = mxGetNumberOfElements(prhs[0]);
@@ -28,6 +28,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 	pos = (double *)mxGetData(prhs[1]);
 	ori = (double *)mxGetData(prhs[2]);
 	ori[0] = ori[0] * M_PI / 180;
+    c = cos(ori[0]);
+    s = sin(ori[0]);
 
 	// Get output pointer
 	plhs[0] = mxCreateCellMatrix(1, (int) cellSize);
@@ -44,8 +46,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 
 		for (matIndex = 0; matIndex < matSize; matIndex++)
 		{
-			po[matIndex] = pr[matIndex] * cos(ori[0]) - pr[matIndex + matSize] * sin(ori[0]) + pos[0];
-			po[matIndex + matSize] = pr[matIndex] * sin(ori[0]) + pr[matIndex + matSize] * cos(ori[0]) + pos[1];
+			po[matIndex] = pr[matIndex] * c - pr[matIndex + matSize] * s + pos[0];
+			po[matIndex + matSize] = pr[matIndex] * s + pr[matIndex + matSize] * c + pos[1];
 		}
 		mxSetCell(plhs[0], cellIndex, mxDuplicateArray(opos));
 	}
