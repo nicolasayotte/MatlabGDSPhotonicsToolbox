@@ -21,30 +21,46 @@ refs = GetRefsFloorplan(refs);
 
 %% Define Cellref Objects
 phW = Waveguide([0.5, 3.5], [layerMap.FullCore, layerMap.FullClad], 5, 5);
-phW2 = Waveguide([0.5, 3.5], [layerMap.FullCore, layerMap.FullClad], 5, 5);
-fA = FiberArray(250, 30 * sqrt(3), 30, ceil(refs(1).floorplan.size(1)/5) * 5, ceil(refs(1).floorplan.size(2)/5) * 5, 20);
-mmi = MMI([8,10], 242.8, 100, 0.9,  phW.layer,  phW.dtype);
-ring = Microring(0.2, phW.layer, phW.dtype, 'radius', 10, 'w', phW.w, 'gap', 0.5);
 
 
 %% Initialize the cell inputs and outputs
-infoIn = CursorInfo([0, 0], 180, 1);
+waveguideCount = 5;
+posx = 250 * (0 : waveguideCount - 1)';
+posy = 0 * posx;
+info = CursorInfo([posx, posy], 180, 1);
 
-[topcell, infoOut] = PlaceRef(topcell, infoIn, refs(1).cellname); % input coupler
-[topcell, infoOut] = PlaceRect(topcell, infoOut, fA.safety, phW.w, phW.layer, phW.dtype);
 
+% Write text at the initial cursor positions for automatic measures
+strEl = arrayfun(@(x, y, n) gds_element('text', 'text', ['opt_in_TE_1550_device_NicolasAyotte_MZI', num2str(n)],...
+    'xy', [x, y], 'layer', layerMap.TXT(1)), info.pos( : , 1), info.pos( : , 2), (1:length(info.ori))', 'UniformOutput', 0);
+topcell = add_element(topcell, strEl');
+
+
+% Place the Input couplers
+[topcell, infoOut] = PlaceRef(topcell, info, refs(1).cellname);
 [topcell, infobranch1, infobranch2, ybranchinfo] = ...
-   PlaceYbranch(topcell, infoOut, 1, refs(2).dy, refs(2).cellname, refs(2).filename); % input coupler
+    PlaceYbranch(topcell, infoOut, 1, refs(2).dy, refs(2).cellname, refs(2).filename);  % input coupler y-branch
 
+
+% Branch 1
 [topcell, infobranch1] = PlaceRect(topcell, infobranch1, 100, phW.w, phW.layer, phW.dtype);
-[topcell, infobranch1] = PlaceMicroring(topcell, infobranch1, ring, phW.w, phW.layer, phW.dtype);
+[topcell, infobranch1] = PlaceArc(topcell, infobranch1, 90, phW.r, phW.w, phW.layer, phW.dtype);
+[topcell, infobranch1] = PlaceRect(topcell, infobranch1, 70, phW.w, phW.layer, phW.dtype);
+[topcell, infobranch1] = PlaceArc(topcell, infobranch1, 90, phW.r, phW.w, phW.layer, phW.dtype);
 [topcell, infobranch1] = PlaceRect(topcell, infobranch1, 100, phW.w, phW.layer, phW.dtype);
-[topcell, infobranch2] = PlaceRect(topcell, infobranch2, 200, phW.w, phW.layer, phW.dtype);
 
-[topcell, infotr, inforef]= PlaceMMI(topcell, MergeInfo(infobranch1,infobranch2), phW, phW2, mmi);
+% Branch 2
+[topcell, infobranch2] = PlaceRect(topcell, infobranch2, 130, phW.w, phW.layer, phW.dtype);
+[topcell, infobranch2] = PlaceArc(topcell, infobranch2, 90, phW.r, phW.w, phW.layer, phW.dtype);
+[topcell, infobranch2] = PlaceRect(topcell, infobranch2, 70 + 2 * refs(2).dy, phW.w, phW.layer, phW.dtype);
+[topcell, infobranch2] = PlaceArc(topcell, infobranch2, 90, phW.r, phW.w, phW.layer, phW.dtype);
+[topcell, infobranch2] = PlaceRect(topcell, infobranch2, 130, phW.w, phW.layer, phW.dtype);
 
-[topcell, infoOut] = PlaceRect(topcell, SplitInfo(infotr,1), 100, phW.w, phW.layer, phW.dtype);
-[topcell, ~] = PlaceRef(topcell, infoOut, refs(1).cellname); % input coupler
+
+% Output y-branches and couplers
+[topcell, infobranch1, infobranch2, ybranchinfo] = ...
+    PlaceYbranch(topcell, infobranch1, 3, refs(2).dy, refs(2).cellname, refs(2).filename);  % output coupler y-branch
+[topcell, ~] = PlaceRef(topcell, infobranch1, refs(1).cellname); % input coupler
 
 
 infoIn = [];  % inputs % No external routing
