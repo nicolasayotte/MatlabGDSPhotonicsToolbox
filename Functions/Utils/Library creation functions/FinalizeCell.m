@@ -7,14 +7,16 @@ function FinalizeCell(cad, cellname, cells, refs, infoIn, infoOut, log, varargin
 
 if(iscell(cells))
    topcell = cells{1};
+   internalRefs = cells(2:end);
 else
    topcell = cells;
+   internalRefs = [];
 end
 
 
 %% Input GDS cell information
 filename = ['Cells\' cellname];   % name of GDS of the cell
-[cellrect, cellcenter, cellsize] = GetStructureSize(topcell, refs);
+[cellrect, cellcenter, cellsize] = GetStructureSize(topcell, refs, internalRefs);
 floorplan = struct('rect', cellrect, 'center', cellcenter, 'size', cellsize);
 floorplan = AddOptions(floorplan, varargin{:});
 
