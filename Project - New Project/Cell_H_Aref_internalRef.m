@@ -60,6 +60,4 @@ infoOut = [];
 
 
 %% Save GDS and .mat cell information
-
-GDSinCell;
-FinalizeCell(cad, cellname, cells, refs, infoIn, infoOut, log);
+FinalizeCell(cad, cellname, topcell, refs, infoIn, infoOut, log);
