@@ -5,7 +5,7 @@ This is a Matlab library of functions to allow the design of Photonics Integrate
 
 This is oriented towards intuitive and adaptable creation of GDS layout files for fabrication in different facilities across the world. The toolbox creates a GDS based on a general layer map, but can be set up to export to any other layer map once the design is done.
 
-Nicolas Ayotte and Alexandre D. Simard have used this library to efficiently create multiple layouts for different fabrication facilities across the world with successful results. I have reports the United States, China and Israel from students working in Photonics but also in Quantum Information Processing and Ulraprecision Machining.
+Nicolas Ayotte and Alexandre D. Simard have used this library to efficiently create multiple layouts for different fabrication facilities across the world with successful results. I have reports of the library being used from the United States, China and Israel from students working in Photonics but also in Quantum Information Processing and Ultraprecision Machining.
 
 Features
 --------
